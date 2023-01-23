@@ -11,10 +11,12 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.createTable("Users", {
       firstName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(30),
+        allowNull: false
       },
       lastName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(30),
+        allowNull: false
       },
       id: {
         allowNull: false,
