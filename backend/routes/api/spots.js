@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const { setTokenCookie, requireAuth } = require('../../utils/auth');
+const { requireAuth } = require('../../utils/auth');
 const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../db/models');
 
 const { check } = require('express-validator');
 
 const {
-    handleValidationErrors,
+    //handleValidationErrors,
     queryCheck,
     // validateSpot,
     // validateReview,
@@ -133,51 +133,116 @@ router.get('/', queryCheck, async (req, res, next) => {
 
     let allSpots = await Spot.findAll(query);
 
-    let allSpotsArray = [];
+    let spotsResults = [];
 
     allSpots.forEach(spot => {
-        let matchedSpot = spot.toJSON();
+        let matchedSpots = spot.toJSON();
 
-        let count = spot.Reviews.length;
-        let sum = 0;
-        spot.Reviews.forEach((review) => sum += review.stars)
-        let avg = sum / count;
+        let totalReviews = spot.Reviews.length;
+        let totalStars = 0;
+        spot.Reviews.forEach((review) => totalStars += review.stars)
+        let avg = totalStars / totalReviews;
         if (!avg) {
             avg = "There are no current ratings for this spot"
         };
 
-        matchedSpot.avgRating = avg;
+        matchedSpots.avgRating = avg;
 
-        if (matchedSpot.SpotImages.length > 0) {
-            for (let i = 0; i < matchedSpot.SpotImages.length; i++) {
-                if (matchedSpot.SpotImages[i].preview === true) {
-                    matchedSpot.previewImage = matchedSpot.SpotImages[i].url;
+        if (matchedSpots.SpotImages.length > 0) {
+            for (let i = 0; i < matchedSpots.SpotImages.length; i++) {
+                if (matchedSpots.SpotImages[i].preview === true) {
+                    matchedSpots.previewImage = matchedSpots.SpotImages[i].url;
                 }
             }
         }
 
-        if (!matchedSpot.previewImage) {
-            matchedSpot.previewImage = "There are no preview images for this spot";
+        if (!matchedSpots.previewImage) {
+            matchedSpots.previewImage = "There are no preview images for this spot";
         }
 
-        delete matchedSpot.SpotImages
-        delete matchedSpot.Reviews;
-        allSpotsArray.push(matchedSpot);
+        delete matchedSpots.SpotImages
+        delete matchedSpots.Reviews;
+        spotsResults.push(matchedSpots);
     })
 
-    if (allSpotsArray.length === 0) {
+    if (spotsResults.length === 0) {
         res.json("There are no spots matching your query")
     }
 
 
     res.json({
-        Spots: allSpotsArray,
+        Spots: spotsResults,
         page: page,
         size: size
     });
 
 });
 
+// GET all spots owned by Current User - URL: /api/spots/current
+router.get('/current', requireAuth, async (req, res, next) => {
+    let user = req.user;
 
+    let allSpots = await user.getSpots({
+        include: [
+            {
+                model: Review,
+                attributes: ['stars']
+            },
+            {
+                model: SpotImage,
+                attributes: ['url', 'preview']
+            }
+        ]
+    })
+
+    let spotsResults = [];
+
+    allSpots.forEach(spot => {
+        let matchedSpots = spot.toJSON();
+
+        let totalReviews = spot.Reviews.length;
+        let totalStars = 0;
+        spot.Reviews.forEach((review) => totalStars += review.stars)
+        let avg = totalStars / totalReviews;
+        if (!avg) {
+            avg = "There are no current ratings for this spot"
+        };
+
+        matchedSpots.avgRating = avg;
+
+        if (matchedSpots.SpotImages.length > 0) {
+            for (let i = 0; i < matchedSpots.SpotImages.length; i++) {
+                if (matchedSpots.SpotImages[i].preview === true) {
+                    matchedSpots.previewImage = matchedSpots.SpotImages[i].url;
+                }
+            }
+        }
+
+        if (!matchedSpots.previewImage) {
+            matchedSpots.previewImage = "There are no preview images for this spot";
+        }
+
+        if (!matchedSpots.Reviews.length > 0) {
+            matchedSpots.Reviews = "There are currently no reviews for this spot"
+        }
+
+        if (!matchedSpots.SpotImages.length > 0) {
+            matchedSpots.SpotImages = "There are no current images for this spot"
+        }
+
+        delete matchedSpots.SpotImages;
+        delete matchedSpots.Reviews;
+        spotsResults.push(matchedSpots);
+    })
+
+
+    if (spotsResults.length === 0) {
+        res.json("You currently do not own any spots")
+    }
+
+    res.json({
+        Spots: spotsResults
+    })
+})
 
 module.exports = router;

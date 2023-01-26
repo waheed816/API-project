@@ -49,8 +49,37 @@ module.exports = {
         userId: 1,
         review: 'Fake Review5',
         stars: 1,
+      },
+      {
+        spotId: 1,
+        userId: 1,
+        review: 'Fake Review6',
+        stars: 2,
+      },
+      {
+        spotId: 2,
+        userId: 3,
+        review: 'Fake Review7',
+        stars: 3,
+      },
+      {
+        spotId: 3,
+        userId: 1,
+        review: 'Fake Review8',
+        stars: 2,
+      },
+      {
+        spotId: 4,
+        userId: 2,
+        review: 'Fake Review9',
+        stars: 5,
+      },
+      {
+        spotId: 5,
+        userId: 3,
+        review: 'Fake Review10',
+        stars: 2,
       }
-
     ], {})
   },
 
