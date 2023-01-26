@@ -8,21 +8,19 @@ const { check } = require('express-validator');
 
 const {
     //handleValidationErrors,
-    queryCheck,
-    // validateSpot,
+    queryCheckValidator,
+    spotCheckValidator,
     // validateReview,
     // validateBooking,
     // validateSpotImage,
 } = require('../../utils/validation');
-
-//const { ifSpotExists, ifUsersSpot, convertDate } = require('../../utils/error-handlers')
 
 const sequelize = require('sequelize');
 const { Op } = require('sequelize');
 
 
 // GET all spots - URL: /api/spots
-router.get('/', queryCheck, async (req, res, next) => {
+router.get('/', queryCheckValidator, async (req, res, next) => {
 
     //deconstruct all query parameters from request body first
     let { maxLat, minLat, maxLng, minLng, maxPrice, minPrice, page, size } = req.query
@@ -185,6 +183,7 @@ router.get('/', queryCheck, async (req, res, next) => {
 
 // GET all spots owned by Current User - URL: /api/spots/current
 router.get('/current', requireAuth, async (req, res, next) => {
+
     let user = req.user;
 
     let allSpots = await user.getSpots({
@@ -223,8 +222,6 @@ router.get('/current', requireAuth, async (req, res, next) => {
             }
         };
 
-
-
         if (!matchedSpots.Reviews.length > 0) {
             matchedSpots.Reviews = "There are currently no reviews for this spot"
         };
@@ -255,6 +252,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
 //Get details of a Spot from an id - URL: /api/spots/:spotId
 
 router.get('/:spotId', async (req, res, next) => {
+
     let { spotId } = req.params;
 
     let spotInfo = await Spot.findByPk(spotId);
@@ -307,6 +305,20 @@ router.get('/:spotId', async (req, res, next) => {
     });
 
     return res.json(spotInfo);
+})
+
+/// Create a spot - URL: /api/spots
+router.post('/', requireAuth, spotCheckValidator, async (req, res, next) => {
+
+    let user = req.user;
+
+    const newSpotInfo = req.body;
+
+    newSpotInfo.ownerId = user.id;
+
+    const newSpotCreated = await Spot.create(newSpotInfo);
+
+    return res.json(newSpotCreated);
 })
 
 
