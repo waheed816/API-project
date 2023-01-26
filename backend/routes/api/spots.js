@@ -43,6 +43,9 @@ router.get('/', queryCheck, async (req, res, next) => {
         pagination.offset = (page - 1) * size
     }
 
+
+     //===== START BUILDING QUERY => Spot.finAll(query) =====
+
     const query = {
         where: {},
         include: [
@@ -129,7 +132,9 @@ router.get('/', queryCheck, async (req, res, next) => {
     };
 
 
-    //=========++++ FIND ALL SPOTS THAT MATCH QUERIES ======================
+    //================ FIND ALL SPOTS THAT MATCH QUERIES ======================
+
+    //console.log(query);
 
     let allSpots = await Spot.findAll(query);
 
