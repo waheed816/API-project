@@ -159,20 +159,20 @@ router.get('/', queryCheck, async (req, res, next) => {
                     matchedSpots.previewImage = matchedSpots.SpotImages[i].url;
                 }
             }
-        }
+        };
 
         if (!matchedSpots.previewImage) {
             matchedSpots.previewImage = "There are no preview images for this spot";
-        }
+        };
 
         delete matchedSpots.SpotImages
         delete matchedSpots.Reviews;
         spotsResults.push(matchedSpots);
-    })
+    });
 
     if (spotsResults.length === 0) {
         res.json("There are no spots matching your query")
-    }
+    };
 
 
     res.json({
@@ -198,7 +198,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
                 attributes: ['url', 'preview']
             }
         ]
-    })
+    });
 
     let spotsResults = [];
 
@@ -221,33 +221,93 @@ router.get('/current', requireAuth, async (req, res, next) => {
                     matchedSpots.previewImage = matchedSpots.SpotImages[i].url;
                 }
             }
-        }
+        };
 
-        if (!matchedSpots.previewImage) {
-            matchedSpots.previewImage = "There are no preview images for this spot";
-        }
+
 
         if (!matchedSpots.Reviews.length > 0) {
             matchedSpots.Reviews = "There are currently no reviews for this spot"
-        }
+        };
 
         if (!matchedSpots.SpotImages.length > 0) {
             matchedSpots.SpotImages = "There are no current images for this spot"
-        }
+        };
+
+        if (!matchedSpots.previewImage) {
+            matchedSpots.previewImage = "There are no preview images for this spot";
+        };
 
         delete matchedSpots.SpotImages;
         delete matchedSpots.Reviews;
         spotsResults.push(matchedSpots);
-    })
+    });
 
 
     if (spotsResults.length === 0) {
         res.json("You currently do not own any spots")
-    }
+    };
 
     res.json({
         Spots: spotsResults
-    })
+    });
+});
+
+//Get details of a Spot from an id - URL: /api/spots/:spotId
+
+router.get('/:spotId', async (req, res, next) => {
+    let { spotId } = req.params;
+
+    let spotInfo = await Spot.findByPk(spotId);
+
+    if (!spotInfo) {
+        let err = {};
+        err.status = 404;
+        err.title = "Spot not found"
+        err.message = "No spot found matching specified spot id";
+        return next(err);
+    };
+
+    spotInfo = spotInfo.toJSON();
+
+    let count = await Review.count({
+        where: {
+            spotId: spotId
+        }
+    });
+    spotInfo.numReviews = count;
+
+    let sum = await Review.sum('stars', {
+        where: {
+            spotId: spotId
+        }
+    });
+
+    if (sum / count) {
+        spotInfo.avgStarRating = sum / count;
+    } else {
+        spotInfo.avgStarRating = "No current ratings";
+    };
+
+    let spotImages = await SpotImage.findAll({
+        where: {
+            spotId: spotId
+        },
+        attributes: ['id', 'url', 'preview']
+    });
+
+    if (spotImages.length > 0) {
+        spotInfo.SpotImages = spotImages;
+    } else {
+        spotInfo.SpotImages = "No images listed"
+    };
+
+
+    spotInfo.Owner = await User.findByPk(spotInfo.ownerId, {
+        attributes: ['id', 'firstName', 'lastName']
+    });
+
+    return res.json(spotInfo);
 })
+
 
 module.exports = router;
