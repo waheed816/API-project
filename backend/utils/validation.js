@@ -20,23 +20,23 @@ const handleValidationErrors = (req, _res, next) => {
   next();
 };
 
-const queryCheck = [
+const queryCheckValidator = [
   check("maxLat")
     .optional({ nullable: true })
-    .isDecimal()
-    .withMessage("Maximum latitude is invalid"),
+    .isFloat({ min: -90, max: 90 })
+    .withMessage("Must enter a latitude value between -90 and 90"),
   check("minLat")
     .optional({ nullable: true })
-    .isDecimal()
-    .withMessage("Minimum latitude is invalid"),
+    .isFloat({ min: -90, max: 90 })
+    .withMessage("Must enter a latitude value between -90 and 90"),
   check("maxLng")
     .optional({ nullable: true })
-    .isDecimal()
-    .withMessage("Maximum longitude is invalid"),
+    .isFloat({ min: -180, max: 180 })
+    .withMessage("Must enter a longtitude value between -180 and 180"),
   check("minLng")
     .optional({ nullable: true })
-    .isDecimal()
-    .withMessage("Minimum longitude is invalid"),
+    .isFloat({ min: -180, max: 180 })
+    .withMessage("Must enter a longtitude value between -180 and 180"),
   check("maxPrice")
     .optional()
     .isFloat({ min: 0 })
@@ -56,7 +56,44 @@ const queryCheck = [
   handleValidationErrors
 ];
 
+const spotCheckValidator = [
+  check("address")
+      .notEmpty()
+      .withMessage("Street address is required"),
+  check("city")
+      .notEmpty()
+      .withMessage("City is required"),
+  check("state")
+      .notEmpty()
+      .withMessage("State is required"),
+  check("country")
+      .notEmpty()
+      .withMessage("Country is required"),
+  check("lat", "Must enter a latitude")
+      .notEmpty()
+      .bail()
+      .isFloat({ min: -90, max: 90 })
+      .withMessage("Must enter a latitude value between -90 and 90"),
+  check("lng", "Must enter a longtitude")
+      .notEmpty()
+      .bail()
+      .isFloat({ min: -180, max: 180 })
+      .withMessage("Must enter a longtitude value between -180 and 180"),
+  check("name")
+      .notEmpty()
+      .isLength({ max: 50 })
+      .withMessage("Name must be less than 50 characters"),
+  check("description")
+      .notEmpty()
+      .withMessage("Description is required"),
+  check("price")
+      .notEmpty()
+      .withMessage("Price per day is required"),
+  handleValidationErrors
+];
+
 module.exports = {
   handleValidationErrors,
-  queryCheck,
+  queryCheckValidator,
+  spotCheckValidator
 };
