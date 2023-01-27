@@ -321,8 +321,6 @@ router.post('/:spotId/images', requireAuth, spotImageValidator, async (req, res,
     let { url, preview } = req.body;
     const spotInfo = await Spot.findByPk(spotId);
 
-    const user = req.user;
-
     //CHECK IF SPOT EXISTS
     if (!spotInfo) {
         let err = {};
@@ -333,6 +331,7 @@ router.post('/:spotId/images', requireAuth, spotImageValidator, async (req, res,
     };
 
     //CHECK IF SPOT BELONGS TO LOGGED IN USER
+    const user = req.user;
     if (user.id !== spotInfo.ownerId) {
         const err = {};
         err.title = "Authorization error";
@@ -361,8 +360,8 @@ router.put('/:spotId', requireAuth, spotCheckValidator, async (req, res, next) =
     const { spotId } = req.params;
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
-    let spotInfo = await Spot.findByPk(spotId);
-    const user = req.user;
+    const spotInfo = await Spot.findByPk(spotId);
+
 
     //CHECK IF SPOT EXISTS
     if (!spotInfo) {
@@ -374,6 +373,7 @@ router.put('/:spotId', requireAuth, spotCheckValidator, async (req, res, next) =
     };
 
     //CHECK IF SPOT BELONGS TO LOGGED IN USER
+    const user = req.user;
     if (user.id !== spotInfo.ownerId) {
         const err = {};
         err.title = "Authorization error";
@@ -396,6 +396,42 @@ router.put('/:spotId', requireAuth, spotCheckValidator, async (req, res, next) =
 
     res.json(spotInfo);
 })
+
+//Delete a spot - URL: /api/spots/:spotId
+
+router.delete('/:spotId', requireAuth, async (req, res, next) => {
+    const { spotId } = req.params;
+
+    const spotInfo = await Spot.findByPk(spotId);
+
+     //CHECK IF SPOT EXISTS
+     if (!spotInfo) {
+        let err = {};
+        err.status = 404;
+        err.title = "Spot not found"
+        err.message = "Spot with specified spotId does not exist";
+        return next(err);
+    };
+
+    //CHECK IF SPOT BELONGS TO LOGGED IN USER
+    const user = req.user;
+    if (user.id !== spotInfo.ownerId) {
+        const err = {};
+        err.title = "Authorization error";
+        err.status = 403;
+        err.message = "You are not the authorized owner for this spot";
+        return next(err);
+    }
+
+    spotInfo.destroy();
+    res.json({
+        message: "Successfully deleted",
+        statusCode: 200
+    })
+})
+
+
+
 
 
 module.exports = router;
