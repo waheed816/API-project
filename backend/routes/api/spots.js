@@ -9,7 +9,8 @@ const { check } = require('express-validator');
 const {
     queryCheckValidator,
     spotCheckValidator,
-    spotImageValidator
+    spotImageValidator,
+    reviewCheckValidator
 } = require('../../utils/validation');
 
 const sequelize = require('sequelize');
@@ -489,6 +490,62 @@ router.get('/:spotId/reviews', async (req, res, next) => {
 });
 
 
+//Create a Review for a Spot based on the Spot's id - URL: /api/spots/:spotId/reviews
 
+//IF SPOT EXISTS FUNCTION
+const checkSpot = async (req, res, next) => {
+    let { spotId } = req.params;
+    let spotInfo = await Spot.findByPk(spotId);
+    if (!spotInfo) {
+        let err = {};
+        err.status = 404;
+        err.title = "Spot not found"
+        err.message = "Spot with specified spotId does not exist";
+        return next(err);
+    };
+    return next();
+}
+
+//IF USER ALREADY HAS EXISTING REVIEW FOR SPOT FUNCTION
+const checkForExistingReview = async (req, res, next) => {
+    const user = req.user;
+
+    let { spotId } = req.params;
+
+    let existingReview = await Review.findOne({
+        where: {
+            spotId: spotId,
+            userId: user.id
+        }
+    })
+
+    const err = {};
+
+    if (existingReview) {
+        err.title = "Current user already has an existing review for this spot";
+        err.status = 403;
+        err.message = "User already has a review for this spot";
+        return next(err)
+    }
+    return next();
+};
+
+
+router.post('/:spotId/reviews', requireAuth, checkSpot, checkForExistingReview, reviewCheckValidator, async (req, res, next) => {
+    const { spotId } = req.params;
+    const { review, stars } = req.body
+
+    const user = req.user;
+    const spotInfo = await Spot.findByPk(spotId);
+
+    const newReview = await spotInfo.createReview({
+        userId: user.id,
+        review: review,
+        stars: stars
+    })
+
+    res.status = 201;
+    res.json(newReview)
+})
 
 module.exports = router;
