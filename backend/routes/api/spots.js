@@ -439,5 +439,56 @@ router.delete('/:spotId', requireAuth, async (req, res, next) => {
     })
 });
 
+//Get all Reviews by a Spot's id - URL: /api/spots/:spotId/reviews
+router.get('/:spotId/reviews', async (req, res, next) => {
+    const { spotId } = req.params;
+
+    const spotInfo = await Spot.findByPk(spotId);
+
+     //CHECK IF SPOT EXISTS
+     if (!spotInfo) {
+        let err = {};
+        err.status = 404;
+        err.title = "Spot not found"
+        err.message = "Spot with specified spotId does not exist";
+        return next(err);
+    };
+
+    const reviews = await spotInfo.getReviews({
+        include: [
+            {
+                model: User,
+                attributes: ['id', 'firstName', 'lastName']
+            },
+            {
+                model: ReviewImage,
+                attributes: ['id', 'url']
+            }
+        ]
+    });
+
+    if (!reviews.length) {
+        return res.json("There are no reviews for this specified spot")
+    };
+
+    let reviewsResults = [];
+    reviews.forEach(review => {
+        let matchedReview = review.toJSON();
+
+        if (!matchedReview.ReviewImages.length > 0) {
+            matchedReview.ReviewImages = "No review images were included for this review"
+        }
+
+        reviewsResults.push(matchedReview);
+    });
+
+
+    res.json({
+        Reviews: reviewsResults
+    });
+});
+
+
+
 
 module.exports = router;
