@@ -10,6 +10,7 @@ const {
     //handleValidationErrors,
     queryCheckValidator,
     spotCheckValidator,
+    spotImageValidator
     // validateReview,
     // validateBooking,
     // validateSpotImage,
@@ -252,6 +253,7 @@ router.get('/:spotId', async (req, res, next) => {
 
     let spotInfo = await Spot.findByPk(spotId);
 
+    //CHECK IF SPOT EXISTS
     if (!spotInfo) {
         let err = {};
         err.status = 404;
@@ -302,7 +304,7 @@ router.get('/:spotId', async (req, res, next) => {
     return res.json(spotInfo);
 })
 
-/// Create a spot - URL: /api/spots
+// Create a spot - URL: /api/spots
 router.post('/', requireAuth, spotCheckValidator, async (req, res, next) => {
 
     let user = req.user;
@@ -315,6 +317,46 @@ router.post('/', requireAuth, spotCheckValidator, async (req, res, next) => {
 
     return res.json(newSpotCreated);
 });
+
+//Add an Image to a Spot based on the Spot's id - URL: /api/spots/:spotId/images
+
+router.post('/:spotId/images', requireAuth, spotImageValidator, async (req, res, next) => {
+    let { spotId } = req.params;
+    let { url, preview } = req.body;
+    const spotInfo = await Spot.findByPk(spotId);
+
+    const user = req.user;
+
+    //CHECK IF SPOT EXISTS
+    if (!spotInfo) {
+        let err = {};
+        err.status = 404;
+        err.title = "Spot not found"
+        err.message = "Spot with specified spotId does not exist";
+        return next(err);
+    };
+
+    //CHECK IF SPOT BELONGS TO LOGGED IN USER
+    if (user.id !== spotInfo.ownerId) {
+        const err = {};
+        err.title = "Authorization error";
+        err.status = 403;
+        err.message = "You are not the authorized owner for this spot";
+        return next(err);
+    }
+
+
+    let spotImage = await spotInfo.createSpotImage({
+        url: url,
+        preview: preview
+    })
+
+    res.json({
+        id: spotImage.id,
+        url: spotImage.url,
+        preview: spotImage.preview
+    });
+})
 
 
 module.exports = router;
