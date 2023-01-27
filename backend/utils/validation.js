@@ -86,14 +86,28 @@ const spotCheckValidator = [
   check("description")
       .notEmpty()
       .withMessage("Description is required"),
-  check("price")
+  check("price", "Price per day is required")
       .notEmpty()
-      .withMessage("Price per day is required"),
+      .bail()
+      .isFloat({min: 0})
+      .withMessage("Price cannot be less than 0"),
+  handleValidationErrors
+];
+
+const spotImageValidator = [
+  check('url')
+      .notEmpty()
+      .withMessage('url must be defined'),
+  check('preview')
+      .notEmpty()
+      .isBoolean()
+      .withMessage('preview must be a boolean value'),
   handleValidationErrors
 ];
 
 module.exports = {
   handleValidationErrors,
   queryCheckValidator,
-  spotCheckValidator
+  spotCheckValidator,
+  spotImageValidator
 };
