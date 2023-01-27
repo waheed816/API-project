@@ -125,11 +125,12 @@ const reviewImageCheckValidator = [
   handleValidationErrors
 ];
 
+
 module.exports = {
   handleValidationErrors,
   queryCheckValidator,
   spotCheckValidator,
   spotImageValidator,
   reviewCheckValidator,
-  reviewImageCheckValidator
+  reviewImageCheckValidator,
 };
