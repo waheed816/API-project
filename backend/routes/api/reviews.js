@@ -108,9 +108,9 @@ router.post("/:reviewId/images", requireAuth, checkIfReviewExists, checkIfReview
     const { reviewId } = req.params;
     const { url } = req.body;
 
-    const review = await Review.findByPk(reviewId)
+    const review = await Review.findByPk(reviewId);
 
-    let allReviewImages = await review.getReviewImages()
+    let allReviewImages = await review.getReviewImages();
 
     const err = {}
     if (allReviewImages.length >= 10) {
@@ -127,9 +127,9 @@ router.post("/:reviewId/images", requireAuth, checkIfReviewExists, checkIfReview
     res.json({
         id: newReviewImage.id,
         url: newReviewImage.url
-    })
+    });
 })
-
+;
 //Edit a Review based on review id - URL: /api/reviews/:reviewId
 router.put('/:reviewId', requireAuth, checkIfReviewExists, checkIfReviewBelongsToUser, reviewCheckValidator, async (req, res, next) => {
 
@@ -144,6 +144,20 @@ router.put('/:reviewId', requireAuth, checkIfReviewExists, checkIfReviewBelongsT
     await editReview.save();
 
     return res.json(editReview);
-})
+});
 
 module.exports = router;
+
+//Delete review based on review id - URL: /api/reviews/:reviewId
+router.delete('/:reviewId', requireAuth, checkIfReviewExists, checkIfReviewBelongsToUser, async (req, res, next) => {
+    const { reviewId } = req.params;
+
+    let review = await Review.findByPk(reviewId);
+
+    review.destroy();
+
+    return res.json({
+        "message": "Successfully deleted",
+        "statusCode": 200
+    })
+});
