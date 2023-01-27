@@ -7,7 +7,7 @@ const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../d
 const { check } = require('express-validator');
 const sequelize = require('sequelize');
 
-const { reviewImageCheckValidator } = require('../../utils/validation');
+const { reviewImageCheckValidator, reviewCheckValidator } = require('../../utils/validation');
 
 // Get reviews of current user - URL: /api/reviews/current
 router.get('/current', requireAuth, async (req, res, next) => {
@@ -130,5 +130,20 @@ router.post("/:reviewId/images", requireAuth, checkIfReviewExists, checkIfReview
     })
 })
 
+//Edit a Review based on review id - URL: /api/reviews/:reviewId
+router.put('/:reviewId', requireAuth, checkIfReviewExists, checkIfReviewBelongsToUser, reviewCheckValidator, async (req, res, next) => {
+
+    const { reviewId } = req.params;
+    const { review, stars } = req.body;
+
+    let editReview = await Review.findByPk(reviewId);
+
+    editReview.stars = stars;
+    editReview.review = review;
+
+    await editReview.save();
+
+    return res.json(editReview);
+})
 
 module.exports = router;
