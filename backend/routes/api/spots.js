@@ -124,43 +124,48 @@ router.get('/', queryCheckValidator, async (req, res, next) => {
     };
 
 
-    //=========++++ FIND ALL SPOTS THAT MATCH QUERIES ======================
+    //============ FIND ALL SPOTS THAT MATCH QUERIES ======================
 
     let allSpots = await Spot.findAll(query);
 
     let spotsResults = [];
 
     allSpots.forEach(spot => {
-        let matchedSpots = spot.toJSON();
+        let matchedSpot = spot.toJSON();
 
         let totalReviews = spot.Reviews.length;
         let totalStars = 0;
-        spot.Reviews.forEach((review) => totalStars += review.stars)
+
+        spot.Reviews.forEach((review) => {
+            totalStars += review.stars
+        })
+
         let avg = totalStars / totalReviews;
+
         if (!avg) {
             avg = "There are no current ratings for this spot"
         };
 
-        matchedSpots.avgRating = avg;
+        matchedSpot.avgRating = avg;
 
-        if (matchedSpots.SpotImages.length > 0) {
-            for (let i = 0; i < matchedSpots.SpotImages.length; i++) {
-                if (matchedSpots.SpotImages[i].preview === true) {
-                    matchedSpots.previewImage = matchedSpots.SpotImages[i].url;
+        if (matchedSpot.SpotImages.length > 0) {
+            for (let i = 0; i < matchedSpot.SpotImages.length; i++) {
+                if (matchedSpot.SpotImages[i].preview === true) {
+                    matchedSpot.previewImage = matchedSpot.SpotImages[i].url;
                 }
             }
         };
 
-        if (!matchedSpots.previewImage) {
-            matchedSpots.previewImage = "There are no preview images for this spot";
+        if (!matchedSpot.previewImage) {
+            matchedSpot.previewImage = "There are no preview images for this spot";
         };
 
-        delete matchedSpots.SpotImages
-        delete matchedSpots.Reviews;
-        spotsResults.push(matchedSpots);
+        delete matchedSpot.SpotImages
+        delete matchedSpot.Reviews;
+        spotsResults.push(matchedSpot);
     });
 
-    if (spotsResults.length === 0) {
+    if (!spotsResults.length) {
         res.json("There are no spots matching your query")
     };
 
@@ -198,8 +203,12 @@ router.get('/current', requireAuth, async (req, res, next) => {
 
         let totalReviews = spot.Reviews.length;
         let totalStars = 0;
-        spot.Reviews.forEach((review) => totalStars += review.stars)
+        spot.Reviews.forEach((review) => {
+            totalStars += review.stars
+        });
+
         let avg = totalStars / totalReviews;
+
         if (!avg) {
             avg = "There are no current ratings for this spot"
         };
@@ -338,13 +347,13 @@ router.post('/:spotId/images', requireAuth, spotImageValidator, async (req, res,
         err.status = 403;
         err.message = "You are not the authorized owner for this spot";
         return next(err);
-    }
+    };
 
 
     let spotImage = await spotInfo.createSpotImage({
         url: url,
         preview: preview
-    })
+    });
 
     res.json({
         id: spotImage.id,
@@ -380,7 +389,7 @@ router.put('/:spotId', requireAuth, spotCheckValidator, async (req, res, next) =
         err.status = 403;
         err.message = "You are not the authorized owner for this spot";
         return next(err);
-    }
+    };
 
     spotInfo.address = address;
     spotInfo.city = city;
@@ -392,10 +401,10 @@ router.put('/:spotId', requireAuth, spotCheckValidator, async (req, res, next) =
     spotInfo.description = description;
     spotInfo.price = price;
 
-    await spotInfo.save()
+    await spotInfo.save();
 
     res.json(spotInfo);
-})
+});
 
 //Delete a spot - URL: /api/spots/:spotId
 
@@ -421,17 +430,14 @@ router.delete('/:spotId', requireAuth, async (req, res, next) => {
         err.status = 403;
         err.message = "You are not the authorized owner for this spot";
         return next(err);
-    }
+    };
 
     spotInfo.destroy();
     res.json({
         message: "Successfully deleted",
         statusCode: 200
     })
-})
-
-
-
+});
 
 
 module.exports = router;

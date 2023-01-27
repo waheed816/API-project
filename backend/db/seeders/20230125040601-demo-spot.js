@@ -79,6 +79,18 @@ module.exports = {
         description: 'Fake Description5',
         price: 555,
       },
+      {
+        ownerId: 1,
+        address: '7 NoReviews Spot',
+        city: 'FakeCity6',
+        state: 'FakeState6',
+        country: 'United States',
+        lat: 77.77,
+        lng: 77.77,
+        name: 'NoReviewsSpot',
+        description: 'Fake Description7',
+        price: 777,
+      }
     ], {});
 
   },
