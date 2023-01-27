@@ -489,10 +489,7 @@ router.get('/:spotId/reviews', async (req, res, next) => {
     });
 });
 
-
-//Create a Review for a Spot based on the Spot's id - URL: /api/spots/:spotId/reviews
-
-//IF SPOT EXISTS FUNCTION
+//CHECK IF SPOT EXISTS FUNCTION
 const checkSpot = async (req, res, next) => {
     let { spotId } = req.params;
     let spotInfo = await Spot.findByPk(spotId);
@@ -506,7 +503,7 @@ const checkSpot = async (req, res, next) => {
     return next();
 }
 
-//IF USER ALREADY HAS EXISTING REVIEW FOR SPOT FUNCTION
+//CHECK IF USER ALREADY HAS EXISTING REVIEW FOR SPOT FUNCTION
 const checkForExistingReview = async (req, res, next) => {
     const user = req.user;
 
@@ -522,15 +519,15 @@ const checkForExistingReview = async (req, res, next) => {
     const err = {};
 
     if (existingReview) {
-        err.title = "Current user already has an existing review for this spot";
         err.status = 403;
+        err.title = "Current user already has an existing review for this spot";
         err.message = "User already has a review for this spot";
         return next(err)
     }
     return next();
 };
 
-
+//Create a Review for a Spot based on the Spot's id - URL: /api/spots/:spotId/reviews
 router.post('/:spotId/reviews', requireAuth, checkSpot, checkForExistingReview, reviewCheckValidator, async (req, res, next) => {
     const { spotId } = req.params;
     const { review, stars } = req.body
