@@ -118,10 +118,18 @@ const reviewCheckValidator = [
   handleValidationErrors
 ];
 
+const reviewImageCheckValidator = [
+  check('url')
+      .notEmpty()
+      .withMessage('Must provide image url'),
+  handleValidationErrors
+];
+
 module.exports = {
   handleValidationErrors,
   queryCheckValidator,
   spotCheckValidator,
   spotImageValidator,
-  reviewCheckValidator
+  reviewCheckValidator,
+  reviewImageCheckValidator
 };

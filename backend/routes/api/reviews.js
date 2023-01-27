@@ -7,6 +7,7 @@ const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../d
 const { check } = require('express-validator');
 const sequelize = require('sequelize');
 
+const { reviewImageCheckValidator } = require('../../utils/validation');
 
 // Get reviews of current user - URL: /api/reviews/current
 router.get('/current', requireAuth, async (req, res, next) => {
@@ -70,6 +71,64 @@ router.get('/current', requireAuth, async (req, res, next) => {
     });
 });
 
+// CHECK IF REVIEW EXISTS
+const checkIfReviewExists = async (req, res, next) => {
+    const { reviewId } = req.params;
+    const review = await Review.findByPk(reviewId)
+
+    if (!review) {
+        const err = {}
+        err.status = 404;
+        err.title = "This review does not exist";
+        err.message = "Review couldn't be found";
+        return next(err)
+    };
+    return next();
+}
+
+//CHECK IF REVIEW BELONGS TO CURRENT USER
+const checkIfReviewBelongsToUser = async (req, res, next) => {
+    const { reviewId } = req.params;
+    const user = req.user
+    const review = await Review.findByPk(reviewId);
+
+    if (user.id !== review.userId) {
+        const err = {};
+        err.status = 403;
+        err.title = "Authorization error";
+        err.message = "Current user is not authorized to add to make changes to this review";
+        return next(err);
+    }
+    return next();
+};
+
+// Add an Image to a Review based on the Review's id - URL: /api/reviews/:reviewId/images
+router.post("/:reviewId/images", requireAuth, checkIfReviewExists, checkIfReviewBelongsToUser, reviewImageCheckValidator, async (req, res, next) => {
+
+    const { reviewId } = req.params;
+    const { url } = req.body;
+
+    const review = await Review.findByPk(reviewId)
+
+    let allReviewImages = await review.getReviewImages()
+
+    const err = {}
+    if (allReviewImages.length >= 10) {
+        err.title = "Cannot add more than 10 images per review";
+        err.message = "Maximum number of images for this resource was reached";
+        err.status = 403;
+        return next(err)
+    };
+
+    const newReviewImage = await review.createReviewImage({
+        url
+    });
+
+    res.json({
+        id: newReviewImage.id,
+        url: newReviewImage.url
+    })
+})
 
 
 module.exports = router;
