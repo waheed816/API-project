@@ -79,8 +79,9 @@ const spotCheckValidator = [
       .bail()
       .isFloat({ min: -180, max: 180 })
       .withMessage("Must enter a longtitude value between -180 and 180"),
-  check("name")
+  check("name", "Name is required")
       .notEmpty()
+      .bail()
       .isLength({ max: 50 })
       .withMessage("Name must be less than 50 characters"),
   check("description")

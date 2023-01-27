@@ -7,13 +7,9 @@ const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../d
 const { check } = require('express-validator');
 
 const {
-    //handleValidationErrors,
     queryCheckValidator,
     spotCheckValidator,
     spotImageValidator
-    // validateReview,
-    // validateBooking,
-    // validateSpotImage,
 } = require('../../utils/validation');
 
 const sequelize = require('sequelize');
@@ -356,6 +352,49 @@ router.post('/:spotId/images', requireAuth, spotImageValidator, async (req, res,
         url: spotImage.url,
         preview: spotImage.preview
     });
+})
+
+//Edit a Spot - URL: /api/spots/:spotId
+
+router.put('/:spotId', requireAuth, spotCheckValidator, async (req, res, next) => {
+
+    const { spotId } = req.params;
+    const { address, city, state, country, lat, lng, name, description, price } = req.body;
+
+    let spotInfo = await Spot.findByPk(spotId);
+    const user = req.user;
+
+    //CHECK IF SPOT EXISTS
+    if (!spotInfo) {
+        let err = {};
+        err.status = 404;
+        err.title = "Spot not found"
+        err.message = "Spot with specified spotId does not exist";
+        return next(err);
+    };
+
+    //CHECK IF SPOT BELONGS TO LOGGED IN USER
+    if (user.id !== spotInfo.ownerId) {
+        const err = {};
+        err.title = "Authorization error";
+        err.status = 403;
+        err.message = "You are not the authorized owner for this spot";
+        return next(err);
+    }
+
+    spotInfo.address = address;
+    spotInfo.city = city;
+    spotInfo.state = state;
+    spotInfo.country = country;
+    spotInfo.lat = lat;
+    spotInfo.lng = lng;
+    spotInfo.name = name;
+    spotInfo.description = description;
+    spotInfo.price = price;
+
+    await spotInfo.save()
+
+    res.json(spotInfo);
 })
 
 
