@@ -299,7 +299,7 @@ router.get('/:spotId', async (req, res, next) => {
     if (spotImages.length > 0) {
         spotInfo.SpotImages = spotImages;
     } else {
-        spotInfo.SpotImages = "No images listed"
+        spotInfo.SpotImages = "There are no images for this spot"
     };
 
 
@@ -535,14 +535,69 @@ router.post('/:spotId/reviews', requireAuth, checkSpot, checkForExistingReview, 
     const user = req.user;
     const spotInfo = await Spot.findByPk(spotId);
 
-    const newReview = await spotInfo.createReview({
+    const createNewReview = await spotInfo.createReview({
         userId: user.id,
         review: review,
         stars: stars
     })
 
     res.status = 201;
-    res.json(newReview)
+    res.json(createNewReview)
 })
+
+//Get all Bookings for a Spot based on the Spot's id - URL: /api/spots/:spotId/bookings
+router.get('/:spotId/bookings', requireAuth, checkSpot, async (req, res, next) => {
+    const { spotId } = req.params;
+    const userInfo = req.user;
+
+    const spotInfo = await Spot.findByPk(spotId);
+
+    let spotBookings = await spotInfo.getBookings({
+        include: {
+            model: User,
+            attributes: ["id", "firstName", "lastName"]
+        }
+    });
+
+    if (!spotBookings.length > 0) {
+        return res.json({
+            message: "There are no bookings for this spot"
+        })
+    };
+
+    const bookingsResults = [];
+    spotBookings.forEach(booking => {
+
+        let matchedBooking = booking.toJSON();
+
+        matchedBooking.startDate = matchedBooking.startDate.split(" ")[0];
+        matchedBooking.endDate = matchedBooking.endDate.split(" ")[0];
+        
+        if (userInfo.id !== spotInfo.ownerId) {
+            let eachMatchedBooking = {
+                spotId: matchedBooking.spotId,
+                startDate: matchedBooking.startDate,
+                endDate: matchedBooking.endDate
+            };
+            bookingsResults.push(eachMatchedBooking);
+        } else {
+            let eachMatchedBooking = {
+                User: matchedBooking.User,
+                spotId: matchedBooking.spotId,
+                userId: matchedBooking.userId,
+                startDate: matchedBooking.startDate,
+                endDate: matchedBooking.endDate,
+                createdAt: matchedBooking.createdAt,
+                updatedAt: matchedBooking.updatedAt
+            };
+            bookingsResults.push(eachMatchedBooking);
+        }
+    })
+
+    res.json({
+        Bookings: bookingsResults
+    })
+})
+
 
 module.exports = router;
