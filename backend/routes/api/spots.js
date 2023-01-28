@@ -10,7 +10,8 @@ const {
     queryCheckValidator,
     spotCheckValidator,
     spotImageValidator,
-    reviewCheckValidator
+    reviewCheckValidator,
+    checkBookingValidator
 } = require('../../utils/validation');
 
 const sequelize = require('sequelize');
