@@ -10,7 +10,8 @@ const {
     queryCheckValidator,
     spotCheckValidator,
     spotImageValidator,
-    reviewCheckValidator
+    reviewCheckValidator,
+    checkBookingValidator
 } = require('../../utils/validation');
 
 const sequelize = require('sequelize');
@@ -572,7 +573,7 @@ router.get('/:spotId/bookings', requireAuth, checkSpot, async (req, res, next) =
 
         matchedBooking.startDate = matchedBooking.startDate.split(" ")[0];
         matchedBooking.endDate = matchedBooking.endDate.split(" ")[0];
-        
+
         if (userInfo.id !== spotInfo.ownerId) {
             let eachMatchedBooking = {
                 spotId: matchedBooking.spotId,
@@ -599,5 +600,105 @@ router.get('/:spotId/bookings', requireAuth, checkSpot, async (req, res, next) =
     })
 })
 
+//Create a Booking from a Spot based on the Spot's id
+//URL: /api/spots/:spotId/bookings
+router.post('/:spotId/bookings', requireAuth, checkSpot, checkBookingValidator, async (req, res, next) => {
+    const { spotId } = req.params;
+    const user = req.user;
+    const spot = await Spot.findByPk(spotId);
+
+    const err = {};
+
+    //FIRST, CHECK IF CURRENT USER OWN'S SPOT BEFORE STARTING RESERVATION
+    if (user.id === spot.ownerId) {
+        err.status = 401;
+        err.title = "AUTHORIZATION ERROR";
+        err.message = "You cannot make a reservation for a spot that belongs to you";
+        return next(err);
+    };
+
+    //GRAB THE TIME ENTERED BY USER
+    let { startDate, endDate } = req.body;
+
+    const convertToDateObject = (date) => {
+        const [year, month, day] = date.split("-");
+        const newDateObject = new Date(year, month-1, day)
+        return newDateObject;
+    }
+
+    //CONVERT TIME TO AN INSTANCE OF THE DATE OBJECT
+    startDate = convertToDateObject(startDate)
+    endDate = convertToDateObject(endDate)
+
+    //CHECK IF START DATE IS VALID
+    if (startDate <= new Date()) {
+        err.statusCode = 400;
+        err.title = "INVALID START DATE VALUE";
+        err.message = "The start date value cannot be before the current date";
+        return next(err)
+    }
+
+    //CHECK IF END DATE IS VALID
+    if (endDate <= startDate) {
+        err.statusCode = 400;
+        err.title = "INVALID END DATE VALUE";
+        err.message = "The end date value cannot be on or before the start date";
+        return next(err);
+    };
+
+    //CHECK FOR BOOKING CONFLICTS
+
+    const spotBookings = await spot.getBookings();
+
+    spotBookings.forEach(booking => {
+        let spotBooking = booking.toJSON();
+        err.status = 403;
+        err.title = "Booking Conflict";
+        err.message = "Sorry, this spot is already booked for the specified dates";
+
+        reservedStartDate = convertToDateObject(spotBooking.startDate);
+        reservedEndDate = convertToDateObject(spotBooking.endDate);
+
+
+        //IF RESERVED START DATE IS AFTER/ON BOOKING START DATE && RESERVED END DATE IS BEFORE/ON BOOKING END DATE
+        //IF RESERVED START DATE & END DATE FALL IN THE MIDDLE OF BOOKING START DATE AND END DATE
+        //DESIRED START DATE-------RESERVED START DATE-------RESERVED END DATE-------DESIRED START DATE
+        //======================================OOOOOOOOOORRRRRRRRRR==============================================
+        //
+        if (((reservedStartDate >= startDate) && (reservedEndDate <= endDate)) ||
+                   ((reservedStartDate <= startDate) && (reservedEndDate >= endDate)))
+        {
+                err.errors = [
+                    { startDate: "Start date conflicts with an existing booking" },
+                    { endDate: "End date conflicts with an existing booking" }
+                ]
+                return next(err);
+
+        //IF START DATE IS AFTER/ON RESERVED START DATE && START DATE IS BEFORE/ON RESERVED END DATE
+        //IF START DATE FALLS IN THE MIDDLE OF A RESERVED START AND END DATE
+        //RESERVED START DATE-------DESIRED START DATE-------RESERVED END DATE
+        } else if ((reservedStartDate <= startDate) && (reservedEndDate >= startDate)) {
+        err.errors = [
+            { startDate: "Start date conflicts with an existing booking" }
+        ]
+        return next(err);
+
+        }else if ((reservedStartDate <= endDate) && (reservedEndDate >= endDate)) {
+            err.errors = [
+                { endDate: "End date conflicts with an existing booking" }
+            ]
+            return next(err);
+        }
+    });
+
+    if (!err.errors) {
+        let newBooking = await spot.createBooking({
+            userId: user.id,
+            startDate,
+            endDate
+        })
+        return res.json(newBooking)
+    };
+})
 
 module.exports = router;

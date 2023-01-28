@@ -125,6 +125,19 @@ const reviewImageCheckValidator = [
   handleValidationErrors
 ];
 
+const checkBookingValidator = [
+  check('startDate', "Must include start date")
+      .notEmpty()
+      .bail()
+      .isDate()
+      .withMessage("Start date must be a valid date in the format of YYYY-MM-DD"),
+  check('endDate', "Must include end date")
+      .notEmpty()
+      .bail()
+      .isDate()
+      .withMessage("End date must be a valid date in the format YYYY-MM-DD"),
+  handleValidationErrors
+];
 
 module.exports = {
   handleValidationErrors,
@@ -133,4 +146,5 @@ module.exports = {
   spotImageValidator,
   reviewCheckValidator,
   reviewImageCheckValidator,
+  checkBookingValidator
 };
