@@ -96,7 +96,7 @@ const checkIfReviewBelongsToUser = async (req, res, next) => {
         const err = {};
         err.status = 403;
         err.title = "Authorization error";
-        err.message = "Current user is not authorized to add to make changes to this review";
+        err.message = "Current user is not authorized to delete or make changes to this review";
         return next(err);
     }
     return next();
