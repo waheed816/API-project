@@ -10,8 +10,7 @@ const {
     queryCheckValidator,
     spotCheckValidator,
     spotImageValidator,
-    reviewCheckValidator,
-    checkBookingValidator
+    reviewCheckValidator
 } = require('../../utils/validation');
 
 const sequelize = require('sequelize');
@@ -700,5 +699,6 @@ router.post('/:spotId/bookings', requireAuth, checkSpot, checkBookingValidator, 
         return res.json(newBooking)
     };
 })
+
 
 module.exports = router;
