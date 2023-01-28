@@ -11,9 +11,9 @@ const sequelize = require('sequelize');
 
 // Get bookings for current user
 router.get("/current", requireAuth, async (req, res, next) => {
-    const user = req.user;
+    const userInfo = req.user;
 
-    const userBookings = await user.getBookings({
+    const userBookings = await userInfo.getBookings({
         include: [{
             model: Spot,
             attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price'],
@@ -36,31 +36,24 @@ router.get("/current", requireAuth, async (req, res, next) => {
 
         let matchedBooking = booking.toJSON();
 
-        if (matchedBooking.Spot.SpotImages.length > 0) {
-            for (let i = 0; i < matchedBooking.Spot.SpotImages.length; i++) {
-                if (matchedBooking.Spot.SpotImages[i].preview === true) {
-                    matchedBooking.Spot.previewImage = matchedBooking.Spot.SpotImages[i].url;
-                }
-            }
-        }
-
-        if (!matchedBooking.Spot.previewImage) {
+        if(matchedBooking.Spot.SpotImages[0].preview === false){
             matchedBooking.Spot.previewImage = "There is no preview image for this spot";
+        }else{
+            matchedBooking.Spot.previewImage = matchedBooking.Spot.SpotImages[0].url
         }
-
 
         delete matchedBooking.Spot.SpotImages;
         const eachMatchedBooking = {
-            id: booking.id,
-            spotId: booking.spotId,
+            id: matchedBooking.id,
+            spotId: matchedBooking.spotId,
             Spot: matchedBooking.Spot,
-            userId: booking.userId,
-            startDate: booking.startDate.split(" ")[0],
-            endDate: booking.endDate.split(" ")[0],
-            createdAt: booking.createdAt,
-            updatedAt: booking.updatedAt
+            userId: matchedBooking.userId,
+            startDate: matchedBooking.startDate.split(" ")[0],
+            endDate: matchedBooking.endDate.split(" ")[0],
+            createdAt: matchedBooking.createdAt,
+            updatedAt: matchedBooking.updatedAt
         }
-        //console.log(eachBooking)
+
         userBookingsResults.push(eachMatchedBooking);
     })
 
