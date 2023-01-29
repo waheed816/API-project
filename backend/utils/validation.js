@@ -126,16 +126,16 @@ const reviewImageCheckValidator = [
 ];
 
 const checkBookingValidator = [
-  check('startDate', "Must include start date")
+  check('startDate', "Must include a start date. NOTE: Date must be in the format of YYYY-MM-DD")
       .notEmpty()
       .bail()
       .isDate()
-      .withMessage("Start date must be a valid date in the format of YYYY-MM-DD"),
-  check('endDate', "Must include end date")
+      .withMessage("Start date must be a valid calendar date AND be in the format of YYYY-MM-DD"),
+  check('endDate', "Must include an end date. NOTE: Date must be in the format of YYYY-MM-DD")
       .notEmpty()
       .bail()
       .isDate()
-      .withMessage("End date must be a valid date in the format YYYY-MM-DD"),
+      .withMessage("End date must be a valid calendar date AND be in the format YYYY-MM-DD"),
   handleValidationErrors
 ];
 
