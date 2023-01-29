@@ -659,32 +659,45 @@ router.post('/:spotId/bookings', requireAuth, checkSpot, checkBookingValidator, 
         let reservedStartDate = convertToDateObject(spotBooking.startDate);
         let reservedEndDate = convertToDateObject(spotBooking.endDate);
 
-        //DESIRED START DATE-------RESERVED START DATE-------RESERVED END DATE-------DESIRED START DATE SCENARIO
-        //======================================OOOOOOOOOORRRRRRRR==============================================
-        //RESERVED START DATE-------DESIRED START DATE-------DESIRED END DATE-------RESERVED START DATE SCENARIO
-        if (((reservedStartDate >= startDate) && (reservedEndDate <= endDate)) ||
-            ((reservedStartDate <= startDate) && (reservedEndDate >= endDate))) {
+        //SCENARIO 1:
+        //DESIRED START DATE-------RESERVED START DATE-------RESERVED END DATE-------DESIRED START DATE
+        if ((reservedStartDate > startDate) && (reservedEndDate < endDate)) {
 
-                err.errors = [
-                    { startDate: "Start date conflicts with an existing booking" },
-                    { endDate: "End date conflicts with an existing booking" }
-                ]
+                err.errors = [{ datesConflict: "There is an existing booking in between your start and end dates" }];
+
                 return next(err);
 
-        //RESERVED START DATE-------DESIRED START DATE-------RESERVED END DATE SCENARIO
-        } else if ((reservedStartDate <= startDate) && (reservedEndDate >= startDate)) {
+        //SCENARIO 2:
+        //RESERVED START DATE-------DESIRED START DATE-------DESIRED END DATE-------RESERVED END DATE
+        }else if (((reservedStartDate <= startDate) && (reservedEndDate >= startDate)) &&
+                    ((reservedStartDate <= endDate) && (reservedEndDate >= endDate))){
 
-            err.errors = [{ startDate: "Start date conflicts with an existing booking" }]
+                        err.errors = [
+
+                            { startDate: "Start date conflicts with an existing booking" },
+                            { endDate: "End date conflicts with an existing booking" }
+
+                        ];
+
+                        return next(err);
+
+        //SCENARIO 3:
+        //RESERVED START DATE-------DESIRED START DATE-------RESERVED END DATE
+        }else if ((reservedStartDate <= startDate) && (reservedEndDate >= startDate)) {
+
+            err.errors = [{ startDate: "Start date conflicts with an existing booking" }];
 
             return next(err);
 
-        //RESERVED START DATE-------DESIRED END DATE-------RESERVED END DATE SCENARIO
+        //SCENARIO 4:
+        //RESERVED START DATE-------DESIRED END DATE-------RESERVED END DATE
         } else if ((reservedStartDate <= endDate) && (reservedEndDate >= endDate)) {
 
-            err.errors = [{ endDate: "End date conflicts with an existing booking" }]
+            err.errors = [{ endDate: "End date conflicts with an existing booking" }];
 
             return next(err);
         }
+
     });
 
     if (!err.errors) {
