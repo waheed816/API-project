@@ -72,8 +72,8 @@ const checkIfBookingExists = async (req, res, next) => {
 
     if (!booking) {
         const err = {};
-        err.title = "Booking couldn't be found"
         err.status = 404;
+        err.title = "Booking couldn't be found"
         err.message = "Couldn't find a booking with that specified booking id";
         return next(err)
     }
@@ -112,14 +112,13 @@ router.put('/:bookingId', requireAuth, checkIfBookingExists,  checkBookingValida
     const originalBookingEndDate = convertToDateObject(changeBookingInfo.endDate);
 
 
-    //CHECK IF ORIGINAL BOOKING END DATE IS PAST THE CURRENT DATE
+    //BOOKING CANNOT BE PAST THEIR ORIGINAL END DATE
     if (originalBookingEndDate < new Date()) {
         err.status = 403;
         err.title = "Can't edit a booking that's past the end date";
         err.message = "Past bookings can't be modified";
         return next(err);
     };
-
 
     //CHECK IF USER IS ATTEMPTING TO MAKE AN EDIT THAT RESULTS IN A DUPLICATE BOOKING
     if ((startDate.getTime() === originalBookingStartDate.getTime()) &&
@@ -167,26 +166,39 @@ router.put('/:bookingId', requireAuth, checkIfBookingExists,  checkBookingValida
             let reservedStartDate = convertToDateObject(spotBooking.startDate);
             let reservedEndDate = convertToDateObject(spotBooking.endDate);
 
-            //DESIRED START DATE-------RESERVED START DATE-------RESERVED END DATE-------DESIRED START DATE SCENARIO
-            //======================================OOOOOOOOOORRRRRRRR==============================================
-            //RESERVED START DATE-------DESIRED START DATE-------DESIRED END DATE-------RESERVED START DATE SCENARIO
-            if (((reservedStartDate >= startDate) && (reservedEndDate <= endDate)) ||
-                ((reservedStartDate <= startDate) && (reservedEndDate >= endDate))) {
 
-                    err.errors = [
-                        { startDate: "Start date conflicts with an existing booking" },
-                        { endDate: "End date conflicts with an existing booking" }
-                    ]
+            //SCENARIO 1:
+            //DESIRED START DATE-------RESERVED START DATE-------RESERVED END DATE-------DESIRED START DATE
+            if ((reservedStartDate > startDate) && (reservedEndDate < endDate)) {
+
+                    err.errors = [{ datesConflict: "There is an existing booking in between your start and end dates" }];
+
                     return next(err);
 
-            //RESERVED START DATE-------DESIRED START DATE-------RESERVED END DATE SCENARIO
-            } else if ((reservedStartDate <= startDate) && (reservedEndDate >= startDate)) {
+            //SCENARIO 2:
+            //RESERVED START DATE-------DESIRED START DATE-------DESIRED END DATE-------RESERVED END DATE
+            }else if (((reservedStartDate <= startDate) && (reservedEndDate >= startDate)) &&
+                     ((reservedStartDate <= endDate) && (reservedEndDate >= endDate))){
 
-                err.errors = [{ startDate: "Start date conflicts with an existing booking" }]
+                        err.errors = [
+
+                            { startDate: "Start date conflicts with an existing booking" },
+                            { endDate: "End date conflicts with an existing booking" }
+
+                        ];
+
+                        return next(err);
+
+            //SCENARIO 3:
+            //RESERVED START DATE-------DESIRED START DATE-------RESERVED END DATE
+            }else if ((reservedStartDate <= startDate) && (reservedEndDate >= startDate)) {
+
+                err.errors = [{ startDate: "Start date conflicts with an existing booking" }];
 
                 return next(err);
 
-            //RESERVED START DATE-------DESIRED END DATE-------RESERVED END DATE SCENARIO
+            //SCENARIO 4:
+            //RESERVED START DATE-------DESIRED END DATE-------RESERVED END DATE
             } else if ((reservedStartDate <= endDate) && (reservedEndDate >= endDate)) {
 
                 err.errors = [{ endDate: "End date conflicts with an existing booking" }];
@@ -203,6 +215,41 @@ router.put('/:bookingId', requireAuth, checkIfBookingExists,  checkBookingValida
         res.json(changeBookingInfo)
     }
 })
+
+// Delete a Booking by bookingId - URL: /api/bookings/:bookingId
+router.delete('/:bookingId', requireAuth, checkIfBookingExists, async (req, res, next) => {
+    const { bookingId } = req.params;
+    const user = req.user;
+
+    let booking = await Booking.findByPk(bookingId);
+
+    let bookingSpot = await booking.getSpot();
+
+    let err = {};
+
+    // Booking must belong to the current user OR the bookingSpot must belong to the current user
+    if ((user.id !== booking.userId) && (user.id !== bookingSpot.ownerId)) {
+        err.status = 403;
+        err.title = "AUTHORIZATION DENIED";
+        err.message = "Current user does not have required authorization to delete this booking";
+        return next(err);
+    }
+
+    const bookingStartDate = convertToDateObject(booking.startDate);
+
+    if (bookingStartDate <= new Date()) {
+        err.status = 403;
+        err.title = "CANNOT DELETE BOOKING";
+        err.message = "Bookings that are past their start date cannot be deleted";
+        return next(err)
+    };
+
+    await booking.destroy();
+    return res.json({
+        "message": "Successfully deleted",
+        "statusCode": 200
+    })
+});
 
 
 module.exports = router;
