@@ -19,15 +19,15 @@ router.delete("/:imageId", requireAuth, async (req, res, next) => {
 
     //CHECK IF SPOT IMAGE EXISTS
     if (!image) {
+        err.status = 404;
         err.title = "There is no spot image with the specified image id";
         err.message = "Spot Image couldn't be found"
-        err.status = 404;
         return next(err)
     };
 
     const spot = await image.getSpot();
 
-    //CHECK IF USER OWNS SPOT
+    //CHECK IF CURRENT USER OWNS SPOT
     if (user.id !== spot.ownerId) {
         err.status = 403;
         err.title = "AUTHORIZATION ERROR";
