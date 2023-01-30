@@ -10,20 +10,29 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 //Signup Validation step
 const validateSignup = [
-  check('email')
-    .exists({ checkFalsy: true })
+  check('firstName',)
+    .notEmpty()
+    .withMessage('Please provide a firstname'),
+  check('lastName')
+    .notEmpty()
+    .withMessage('Pleasee provide a lastname'),
+  check('email', "Please provide an email")
+    .notEmpty()
+    .bail()
     .isEmail()
     .withMessage('Please provide a valid email.'),
-  check('username')
-    .exists({ checkFalsy: true })
+  check('username', "Please provide a username")
+    .notEmpty()
+    .bail()
     .isLength({ min: 4 })
     .withMessage('Please provide a username with at least 4 characters.'),
   check('username')
     .not()
     .isEmail()
     .withMessage('Username cannot be an email.'),
-  check('password')
-    .exists({ checkFalsy: true })
+  check('password', "Please provide a password")
+    .notEmpty()
+    .bail()
     .isLength({ min: 6 })
     .withMessage('Password must be 6 characters or more.'),
   //checking for firstName and lastName column values
@@ -40,60 +49,32 @@ const validateSignup = [
 router.post('/', validateSignup, async (req, res, next) => {
       const { email, password, username, firstName, lastName } = req.body;
 
-      const err = {};
-
-      let emailExists = await User.findOne({
-          where: {
-              email
-          }
-       });
-
-      if (emailExists) {
-          err.title = "Validation error"
-          err.message = "Email invalid";
-          err.status = 403;
-          err.errors = ["That email address is already in use"]
-
-          return next(err)
-      }
-
-      let usernameExists = await User.findOne({
-          where: {
-              username
-          }
+      let doesUsernameExist = await User.findOne({
+        where: { username }
       });
 
-      if (usernameExists) {
-          err.title = "Validation error"
-          err.message = "Username invalid";
-          err.status = 403;
-          err.errors = ["That username is already in use"]
-          return next(err)
+      let doesEmailExist = await User.findOne({
+        where: { email }
+      });
+
+      const err = {};
+
+      if (doesEmailExist) {
+        err.status = 403;
+        err.title = "VALIDATION ERROR"
+        err.message = "User already exists";
+        err.errors = {email: "User with that email already exists"};
+
+        return next(err)
       }
 
-      if (!username || !email || !firstName || !lastName) {
-          err.title = "Validation error"
-          err.message = "Validation error"
-          err.status = 400;
-          err.errors = [];
+      if (doesUsernameExist) {
+        err.status = 403;
+        err.title = "VALIDATION ERROR";
+        err.message = "User already exists";
+        err.errors = {username: "User with that username already exists"};
 
-          if (!email) {
-              err.errors.push("Email required")
-          }
-
-          if (!username) {
-              err.errors.push("Username required")
-          }
-
-          if (!firstName) {
-              err.errors.push(["First name required"])
-          }
-
-          if (!lastName) {
-              err.errors.push(["Last name required"])
-          }
-
-          return next(err)
+        return next(err)
       }
 
       const user = await User.signup({ email, username, password, firstName, lastName });
@@ -101,16 +82,15 @@ router.post('/', validateSignup, async (req, res, next) => {
       await setTokenCookie(res, user);
 
       return res.json({
-          'user': {
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            username: user.username,
-            token: ""
-          }
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        username: user.username,
+        token: ""
       });
     }
-  );
+);
 
 
 module.exports = router;

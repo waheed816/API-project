@@ -21,7 +21,12 @@ module.exports = {
     return queryInterface.bulkInsert(options, [
       {
         spotId: 1,
-        url: "url image 1",
+        url: "url image 1 for spot 1",
+        preview: true
+      },
+      {
+        spotId: 1,
+        url: "url image 2 for spot 1",
         preview: true
       },
       {

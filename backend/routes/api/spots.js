@@ -21,7 +21,7 @@ const { Op } = require('sequelize');
 // GET all spots - URL: /api/spots
 router.get('/', queryCheckValidator, async (req, res, next) => {
 
-    //deconstruct all query parameters from request body first
+    //deconstruct all query parameters from request
     let { maxLat, minLat, maxLng, minLng, maxPrice, minPrice, page, size } = req.query
 
     // ========== page/size PAGINATION QUERY check ==========
@@ -276,6 +276,7 @@ router.get('/:spotId', async (req, res, next) => {
             spotId: spotId
         }
     });
+    
     spotInfo.numReviews = count;
 
     let sum = await Review.sum('stars', {
@@ -296,6 +297,8 @@ router.get('/:spotId', async (req, res, next) => {
         },
         attributes: ['id', 'url', 'preview']
     });
+
+    console.log(spotImages.length);
 
     if (spotImages.length > 0) {
         spotInfo.SpotImages = spotImages;
