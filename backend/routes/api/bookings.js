@@ -12,7 +12,7 @@ const { checkBookingValidator } = require('../../utils/validation');
 
 
 
-// Get bookings for current user
+// Get all of the Current User's Bookings - URL: /api/bookings/current
 router.get("/current", requireAuth, async (req, res, next) => {
     const userInfo = req.user;
 
@@ -39,13 +39,20 @@ router.get("/current", requireAuth, async (req, res, next) => {
 
         let matchedBooking = booking.toJSON();
 
-        if(matchedBooking.Spot.SpotImages[0].preview === false){
-            matchedBooking.Spot.previewImage = "There is no preview image for this spot";
-        }else{
-            matchedBooking.Spot.previewImage = matchedBooking.Spot.SpotImages[0].url
+        if (matchedBooking.Spot.SpotImages.length > 0) {
+            for (let i = 0; i < matchedBooking.Spot.SpotImages.length; i++) {
+                if (matchedBooking.Spot.SpotImages[i].preview === true) {
+                    matchedBooking.Spot.previewImage = matchedBooking.Spot.SpotImages[i].url;
+                }
+            }
+        }
+
+        if (!matchedBooking.Spot.previewImage) {
+            matchedBooking.Spot.previewImage = "No preview image available";
         }
 
         delete matchedBooking.Spot.SpotImages;
+
         const eachMatchedBooking = {
             id: matchedBooking.id,
             spotId: matchedBooking.spotId,
@@ -168,7 +175,7 @@ router.put('/:bookingId', requireAuth, checkIfBookingExists,  checkBookingValida
 
 
             //SCENARIO 1:
-            //DESIRED START DATE-------RESERVED START DATE-------RESERVED END DATE-------DESIRED START DATE
+            //DESIRED START DATE-------RESERVED START DATE-------RESERVED END DATE-------DESIRED END DATE
             if ((reservedStartDate > startDate) && (reservedEndDate < endDate)) {
 
                     err.errors = [{ datesConflict: "There is an existing booking in between your start and end dates" }];
