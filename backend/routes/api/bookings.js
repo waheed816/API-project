@@ -92,7 +92,7 @@ const convertToDateObject = (date) => {
     return newDateObject;
 }
 
-//Edit a Booking based on bookingId - URL: /api/bookings/:bookingId
+//Edit an existing Booking based on bookingId - URL: /api/bookings/:bookingId
 router.put('/:bookingId', requireAuth, checkIfBookingExists,  checkBookingValidator, async (req, res, next) => {
     const { bookingId } = req.params;
     const currentUser = req.user;
@@ -232,7 +232,7 @@ router.delete('/:bookingId', requireAuth, checkIfBookingExists, async (req, res,
 
     let err = {};
 
-    // Booking must belong to the current user OR the bookingSpot must belong to the current user
+    // Booking must belong to the current user OR the booking spot must belong to the current user
     if ((user.id !== booking.userId) && (user.id !== bookingSpot.ownerId)) {
         err.status = 403;
         err.title = "AUTHORIZATION DENIED";

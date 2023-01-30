@@ -129,7 +129,7 @@ router.post("/:reviewId/images", requireAuth, checkIfReviewExists, checkIfReview
     });
 })
 ;
-//Edit a Review based on review id - URL: /api/reviews/:reviewId
+//Edit an existing review based on review id - URL: /api/reviews/:reviewId
 router.put('/:reviewId', requireAuth, checkIfReviewExists, checkIfReviewBelongsToUser, reviewCheckValidator, async (req, res, next) => {
 
     const { reviewId } = req.params;
