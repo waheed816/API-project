@@ -7,13 +7,12 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const validateLogin = [
-  check('credential')
-    .exists({ checkFalsy: true })
+  check('credential',)
     .notEmpty()
-    .withMessage('Please provide a valid email or username.'),
+    .withMessage('Email or username is required'),
   check('password')
-    .exists({ checkFalsy: true })
-    .withMessage('Please provide a password.'),
+    .notEmpty()
+    .withMessage('Password is required'),
   handleValidationErrors
 ];
 
@@ -26,8 +25,8 @@ router.post('/',  validateLogin, async (req, res, next) => {
       if (!user) {
         const err = new Error('Login failed');
         err.status = 401;
-        err.title = 'Login failed';
-        err.errors = ['The provided credentials were invalid.'];
+        err.title = "UNAUTHORIZED LOGIN"
+        err.message = "Invalid credentials"
         return next(err);
       }
 
