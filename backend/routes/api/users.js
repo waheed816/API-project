@@ -35,14 +35,6 @@ const validateSignup = [
     .bail()
     .isLength({ min: 6 })
     .withMessage('Password must be 6 characters or more.'),
-  //checking for firstName and lastName column values
-  check('firstName')
-      .exists({ checkFalsey: true })
-      .withMessage('First name required'),
-  check('lastName')
-      .exists({ checkFalsey: true })
-      .withMessage('Last name required'),
-  handleValidationErrors
 ];
 
 // Sign up
