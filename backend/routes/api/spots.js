@@ -2,9 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { requireAuth } = require('../../utils/auth');
-const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../db/models');
-
-const { check } = require('express-validator');
+const { SpotImage, User, Spot, Review, ReviewImage } = require('../../db/models');
 
 const {
     queryCheckValidator,
@@ -55,27 +53,27 @@ router.get('/', queryCheckValidator, async (req, res, next) => {
         ...pagination,
     };
 
-    // ========== maxLat/minLat LOCATION QUERY check ==========
 
+    // ========== maxPrice/minPrice PRICING QUERY check ==========
 
-    if (maxLat && minLat) {
-        query.where.lat = {
+    if (!maxPrice && minPrice) {
+        query.where.price = {
+            [Op.gte]: minPrice
+        }
+    };
+
+    if (maxPrice && minPrice) {
+        query.where.price = {
             [Op.and]: {
-                [Op.lte]: maxLat,
-                [Op.gte]: minLat
+                [Op.lte]: maxPrice,
+                [Op.gte]: minPrice
             }
         }
     };
 
-    if (!maxLat && minLat) {
-        query.where.lat = {
-            [Op.gte]: minLat
-        }
-    };
-
-    if (maxLat && !minLat) {
-        query.where.lat = {
-            [Op.lte]: maxLat
+    if (maxPrice && !minPrice) {
+        query.where.price = {
+            [Op.lte]: maxPrice
         }
     };
 
@@ -102,26 +100,27 @@ router.get('/', queryCheckValidator, async (req, res, next) => {
         }
     };
 
-    // ========== maxPrice/minPrice PRICING QUERY check ==========
+    // ========== maxLat/minLat LOCATION QUERY check ==========
 
-    if (!maxPrice && minPrice) {
-        query.where.price = {
-            [Op.gte]: minPrice
-        }
-    };
 
-    if (maxPrice && minPrice) {
-        query.where.price = {
+    if (maxLat && minLat) {
+        query.where.lat = {
             [Op.and]: {
-                [Op.lte]: maxPrice,
-                [Op.gte]: minPrice
+                [Op.lte]: maxLat,
+                [Op.gte]: minLat
             }
         }
     };
 
-    if (maxPrice && !minPrice) {
-        query.where.price = {
-            [Op.lte]: maxPrice
+    if (!maxLat && minLat) {
+        query.where.lat = {
+            [Op.gte]: minLat
+        }
+    };
+
+    if (maxLat && !minLat) {
+        query.where.lat = {
+            [Op.lte]: maxLat
         }
     };
 
@@ -252,22 +251,27 @@ router.get('/current', requireAuth, async (req, res, next) => {
     });
 });
 
-//Get details of a Spot from an id - URL: /api/spots/:spotId
-
-router.get('/:spotId', async (req, res, next) => {
-
+//CHECK IF SPOT EXISTS HELPER FUNCTION
+const checkSpot = async (req, res, next) => {
     let { spotId } = req.params;
-
     let spotInfo = await Spot.findByPk(spotId);
-
-    //CHECK IF SPOT EXISTS
     if (!spotInfo) {
         let err = {};
         err.status = 404;
         err.title = "Spot not found"
-        err.message = "No spot found matching specified spot id";
+        err.message = "Spot with specified spotId does not exist";
         return next(err);
     };
+    return next();
+}
+
+//Get details of a Spot by spotId - URL: /api/spots/:spotId
+
+router.get('/:spotId', checkSpot, async (req, res, next) => {
+
+    let { spotId } = req.params;
+
+    let spotInfo = await Spot.findByPk(spotId);
 
     spotInfo = spotInfo.toJSON();
 
@@ -276,7 +280,7 @@ router.get('/:spotId', async (req, res, next) => {
             spotId: spotId
         }
     });
-    
+
     spotInfo.numReviews = count;
 
     let sum = await Review.sum('stars', {
@@ -328,32 +332,28 @@ router.post('/', requireAuth, spotCheckValidator, async (req, res, next) => {
     return res.json(newSpotCreated);
 });
 
-//Add an Image to a Spot based on the Spot's id - URL: /api/spots/:spotId/images
-
-router.post('/:spotId/images', requireAuth, spotImageValidator, async (req, res, next) => {
+//CHECK IF SPOT BELONGS TO LOGGED IN USER HELPER FUNCTION
+const checkSpotBelongsToUser = async (req, res, next) => {
     let { spotId } = req.params;
-    let { url, preview } = req.body;
     const spotInfo = await Spot.findByPk(spotId);
 
-    //CHECK IF SPOT EXISTS
-    if (!spotInfo) {
-        let err = {};
-        err.status = 404;
-        err.title = "Spot not found"
-        err.message = "Spot with specified spotId does not exist";
-        return next(err);
-    };
-
-    //CHECK IF SPOT BELONGS TO LOGGED IN USER
     const user = req.user;
     if (user.id !== spotInfo.ownerId) {
-        const err = {};
+        let err = {};
         err.title = "Authorization error";
         err.status = 403;
         err.message = "You are not the authorized owner for this spot";
         return next(err);
     };
+    return next();
+};
 
+//Add an Image to a Spot based on the Spot's id - URL: /api/spots/:spotId/images
+router.post('/:spotId/images', requireAuth, checkSpot, checkSpotBelongsToUser, spotImageValidator, async (req, res, next) => {
+    let { spotId } = req.params;
+    let { url, preview } = req.body;
+
+    const spotInfo = await Spot.findByPk(spotId);
 
     let spotImage = await spotInfo.createSpotImage({
         url: url,
@@ -367,34 +367,14 @@ router.post('/:spotId/images', requireAuth, spotImageValidator, async (req, res,
     });
 })
 
-//Edit a Spot - URL: /api/spots/:spotId
+//Edit a Spot based on spotId - URL: /api/spots/:spotId
 
-router.put('/:spotId', requireAuth, spotCheckValidator, async (req, res, next) => {
+router.put('/:spotId', requireAuth, checkSpot, checkSpotBelongsToUser, spotCheckValidator, async (req, res, next) => {
 
     const { spotId } = req.params;
     const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
     const spotInfo = await Spot.findByPk(spotId);
-
-
-    //CHECK IF SPOT EXISTS
-    if (!spotInfo) {
-        let err = {};
-        err.status = 404;
-        err.title = "Spot not found"
-        err.message = "Spot with specified spotId does not exist";
-        return next(err);
-    };
-
-    //CHECK IF SPOT BELONGS TO LOGGED IN USER
-    const user = req.user;
-    if (user.id !== spotInfo.ownerId) {
-        const err = {};
-        err.title = "Authorization error";
-        err.status = 403;
-        err.message = "You are not the authorized owner for this spot";
-        return next(err);
-    };
 
     spotInfo.address = address;
     spotInfo.city = city;
@@ -412,32 +392,12 @@ router.put('/:spotId', requireAuth, spotCheckValidator, async (req, res, next) =
 });
 
 //Delete a spot - URL: /api/spots/:spotId
-
-router.delete('/:spotId', requireAuth, async (req, res, next) => {
+router.delete('/:spotId', requireAuth, checkSpot, checkSpotBelongsToUser, async (req, res, next) => {
     const { spotId } = req.params;
 
     const spotInfo = await Spot.findByPk(spotId);
 
-     //CHECK IF SPOT EXISTS
-     if (!spotInfo) {
-        let err = {};
-        err.status = 404;
-        err.title = "Spot not found"
-        err.message = "Spot with specified spotId does not exist";
-        return next(err);
-    };
-
-    //CHECK IF SPOT BELONGS TO LOGGED IN USER
-    const user = req.user;
-    if (user.id !== spotInfo.ownerId) {
-        const err = {};
-        err.title = "Authorization error";
-        err.status = 403;
-        err.message = "You are not the authorized owner for this spot";
-        return next(err);
-    };
-
-    spotInfo.destroy();
+    await spotInfo.destroy();
     res.json({
         message: "Successfully deleted",
         statusCode: 200
@@ -445,19 +405,10 @@ router.delete('/:spotId', requireAuth, async (req, res, next) => {
 });
 
 //Get all Reviews by a Spot's id - URL: /api/spots/:spotId/reviews
-router.get('/:spotId/reviews', async (req, res, next) => {
+router.get('/:spotId/reviews', checkSpot, async (req, res, next) => {
     const { spotId } = req.params;
 
     const spotInfo = await Spot.findByPk(spotId);
-
-     //CHECK IF SPOT EXISTS
-     if (!spotInfo) {
-        let err = {};
-        err.status = 404;
-        err.title = "Spot not found"
-        err.message = "Spot with specified spotId does not exist";
-        return next(err);
-    };
 
     const reviews = await spotInfo.getReviews({
         include: [
@@ -493,21 +444,7 @@ router.get('/:spotId/reviews', async (req, res, next) => {
     });
 });
 
-//CHECK IF SPOT EXISTS FUNCTION
-const checkSpot = async (req, res, next) => {
-    let { spotId } = req.params;
-    let spotInfo = await Spot.findByPk(spotId);
-    if (!spotInfo) {
-        let err = {};
-        err.status = 404;
-        err.title = "Spot not found"
-        err.message = "Spot with specified spotId does not exist";
-        return next(err);
-    };
-    return next();
-}
-
-//CHECK IF USER ALREADY HAS EXISTING REVIEW FOR SPOT FUNCTION
+//CHECK IF USER ALREADY HAS EXISTING REVIEW FOR SPOT (HELPER FUNCTION)
 const checkForExistingReview = async (req, res, next) => {
     const user = req.user;
 
@@ -531,8 +468,24 @@ const checkForExistingReview = async (req, res, next) => {
     return next();
 };
 
+//SPOT OWNER CANNOT LEAVE A REVIEW FOR THEIR OWN SPOT CHECKER
+const reviewerCannotBeSpotOwner = async (req, res, next) => {
+    let { spotId } = req.params;
+    const spotInfo = await Spot.findByPk(spotId);
+
+    const user = req.user;
+    if (user.id == spotInfo.ownerId) {
+        let err = {};
+        err.title = "Authorization error";
+        err.status = 403;
+        err.message = "Spot owners cannot create reviews for their own spot";
+        return next(err);
+    };
+    return next();
+};
+
 //Create a Review for a Spot based on the Spot's id - URL: /api/spots/:spotId/reviews
-router.post('/:spotId/reviews', requireAuth, checkSpot, checkForExistingReview, reviewCheckValidator, async (req, res, next) => {
+router.post('/:spotId/reviews', requireAuth, checkSpot, reviewerCannotBeSpotOwner, checkForExistingReview, reviewCheckValidator, async (req, res, next) => {
     const { spotId } = req.params;
     const { review, stars } = req.body
 
@@ -603,22 +556,29 @@ router.get('/:spotId/bookings', requireAuth, checkSpot, async (req, res, next) =
     })
 })
 
-//Create a Booking from a Spot based on the Spot's id
-//URL: /api/spots/:spotId/bookings
-router.post('/:spotId/bookings', requireAuth, checkSpot, checkBookingValidator, async (req, res, next) => {
+//SPOT OWNER CANNOT CREATE BOOKING FOR THEIR OWN SPOT CHECK
+const checkIfBookingBySpotOwner = async (req, res, next) => {
+    let { spotId } = req.params;
+    const spotInfo = await Spot.findByPk(spotId);
+
+    const user = req.user;
+    if (user.id == spotInfo.ownerId) {
+        let err = {};
+        err.title = "Authorization error";
+        err.status = 403;
+        err.message = "Spot owners cannot create bookings for their own spot";
+        return next(err);
+    };
+    return next();
+};
+
+//Create a Booking for a Spot based on the Spot's id - URL: /api/spots/:spotId/bookings
+router.post('/:spotId/bookings', requireAuth, checkSpot, checkIfBookingBySpotOwner, checkBookingValidator, async (req, res, next) => {
     const { spotId } = req.params;
     const user = req.user;
     const spot = await Spot.findByPk(spotId);
 
     const err = {};
-
-    //FIRST, CHECK IF CURRENT USER OWN'S SPOT BEFORE STARTING RESERVATION
-    if (user.id === spot.ownerId) {
-        err.status = 401;
-        err.title = "AUTHORIZATION ERROR";
-        err.message = "You cannot make a reservation for a spot that belongs to you";
-        return next(err);
-    };
 
     //GRAB THE TIME ENTERED BY USER
     let { startDate, endDate } = req.body;

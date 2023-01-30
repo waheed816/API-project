@@ -2,9 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const { requireAuth } = require('../../utils/auth');
-const { User, Spot, Review, SpotImage, ReviewImage, Booking } = require('../../db/models');
+const { SpotImage, Spot, User, Review, ReviewImage, } = require('../../db/models');
 
-const { check } = require('express-validator');
 const sequelize = require('sequelize');
 
 const { reviewImageCheckValidator, reviewCheckValidator } = require('../../utils/validation');
@@ -46,7 +45,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
         let matchedReview = review.toJSON();
         if (matchedReview.Spot.SpotImages.length > 0) {
             for (let i = 0; i < matchedReview.Spot.SpotImages.length; i++) {
-                if (matchedReview.Spot.SpotImages[i].preview === true) {
+                if (matchedReview.Spot.SpotImages[i].preview) {
                     matchedReview.Spot.previewImage = matchedReview.Spot.SpotImages[i].url;
                 };
             };
