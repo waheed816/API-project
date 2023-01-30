@@ -38,6 +38,8 @@ router.get('/', queryCheckValidator, async (req, res, next) => {
         pagination.offset = (page - 1) * size
     }
 
+
+    //create query with default OR user's custom pagination and to add where clauses based on query parameters user input, if any
     const query = {
         where: {},
         include: [
