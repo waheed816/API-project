@@ -12,6 +12,7 @@ const { checkBookingValidator } = require('../../utils/validation');
 
 // Get all of the Current User's Bookings - URL: /api/bookings/current
 router.get("/current", requireAuth, async (req, res, next) => {
+
     const userInfo = req.user;
 
     const userBookings = await userInfo.getBookings({
@@ -85,6 +86,24 @@ const checkIfBookingExists = async (req, res, next) => {
     return next();
 };
 
+//CHECK IF BOOKING WAS CREATED BY CURRENT USER
+const checkIfBookingByCurrentUser = async (req, res, next) => {
+    const { bookingId } = req.params;
+    let bookingInfo = await Booking.findByPk(bookingId);
+
+    const currentUser = req.user;
+
+    if (currentUser.id !== bookingInfo.userId) {
+        let err = {};
+        err.status = 403;
+        err.title = "AUTHORIZATION ERROR";
+        err.message = "This booking does not belong to current user";
+        return next(err);
+    }
+
+    return next();
+};
+
 //CONVERT DATES TO DATE OBJECT
 const convertToDateObject = (date) => {
     const [year, month, day] = date.split("-");
@@ -93,7 +112,7 @@ const convertToDateObject = (date) => {
 }
 
 //Edit an existing Booking based on bookingId - URL: /api/bookings/:bookingId
-router.put('/:bookingId', requireAuth, checkIfBookingExists,  checkBookingValidator, async (req, res, next) => {
+router.put('/:bookingId', requireAuth, checkIfBookingExists, checkIfBookingByCurrentUser, checkBookingValidator, async (req, res, next) => {
     const { bookingId } = req.params;
     const currentUser = req.user;
     let { startDate, endDate } = req.body;
@@ -101,14 +120,6 @@ router.put('/:bookingId', requireAuth, checkIfBookingExists,  checkBookingValida
     let changeBookingInfo = await Booking.findByPk(bookingId);
 
     let err = {};
-
-    // FIRST, CHECK IF BOOKING BELONGS TO CURRENT USER
-    if (currentUser.id !== changeBookingInfo.userId) {
-        err.status = 403;
-        err.title = "AUTHORIZATION ERROR";
-        err.message = "This booking does not belong to current user";
-        return next(err);
-    }
 
     startDate = convertToDateObject(startDate);
     endDate = convertToDateObject(endDate);

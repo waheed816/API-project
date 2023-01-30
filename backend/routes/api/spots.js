@@ -173,8 +173,8 @@ router.get('/', queryCheckValidator, async (req, res, next) => {
 
     res.json({
         Spots: spotsResults,
-        page: page,
-        size: size
+        page,
+        size
     });
 
 });
@@ -266,7 +266,6 @@ const checkSpot = async (req, res, next) => {
 }
 
 //Get details of a Spot by spotId - URL: /api/spots/:spotId
-
 router.get('/:spotId', checkSpot, async (req, res, next) => {
 
     let { spotId } = req.params;
@@ -301,8 +300,6 @@ router.get('/:spotId', checkSpot, async (req, res, next) => {
         },
         attributes: ['id', 'url', 'preview']
     });
-
-    console.log(spotImages.length);
 
     if (spotImages.length > 0) {
         spotInfo.SpotImages = spotImages;
@@ -368,7 +365,6 @@ router.post('/:spotId/images', requireAuth, checkSpot, checkSpotBelongsToUser, s
 })
 
 //Edit a Spot based on spotId - URL: /api/spots/:spotId
-
 router.put('/:spotId', requireAuth, checkSpot, checkSpotBelongsToUser, spotCheckValidator, async (req, res, next) => {
 
     const { spotId } = req.params;
@@ -531,12 +527,15 @@ router.get('/:spotId/bookings', requireAuth, checkSpot, async (req, res, next) =
         matchedBooking.endDate = matchedBooking.endDate.split(" ")[0];
 
         if (userInfo.id !== spotInfo.ownerId) {
+
             let eachMatchedBooking = {
                 spotId: matchedBooking.spotId,
                 startDate: matchedBooking.startDate,
                 endDate: matchedBooking.endDate
             };
+
             bookingsResults.push(eachMatchedBooking);
+
         } else {
             let eachMatchedBooking = {
                 User: matchedBooking.User,
@@ -610,7 +609,6 @@ router.post('/:spotId/bookings', requireAuth, checkSpot, checkIfBookingBySpotOwn
     };
 
     //CHECK FOR BOOKING CONFLICTS
-
     const spotBookings = await spot.getBookings();
 
     spotBookings.forEach(booking => {
@@ -654,7 +652,7 @@ router.post('/:spotId/bookings', requireAuth, checkSpot, checkIfBookingBySpotOwn
 
         //SCENARIO 4:
         //RESERVED START DATE-------DESIRED END DATE-------RESERVED END DATE
-        } else if ((reservedStartDate <= endDate) && (reservedEndDate >= endDate)) {
+        }else if ((reservedStartDate <= endDate) && (reservedEndDate >= endDate)) {
 
             err.errors = [{ endDate: "End date conflicts with an existing booking" }];
 

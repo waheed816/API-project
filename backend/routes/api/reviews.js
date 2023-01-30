@@ -8,13 +8,13 @@ const sequelize = require('sequelize');
 
 const { reviewImageCheckValidator, reviewCheckValidator } = require('../../utils/validation');
 
-// Get reviews of current user - URL: /api/reviews/current
+// Get all reviews by current user - URL: /api/reviews/current
 router.get('/current', requireAuth, async (req, res, next) => {
     const userId = req.user.id;
 
     const reviews = await Review.findAll({
         where: {
-            userId: userId
+            userId
         },
         include: [
             {
@@ -79,7 +79,7 @@ const checkIfReviewExists = async (req, res, next) => {
         const err = {}
         err.status = 404;
         err.title = "This review does not exist";
-        err.message = "Review couldn't be found";
+        err.message = "There is no review with the specified review id";
         return next(err)
     };
     return next();
@@ -109,43 +109,44 @@ router.post("/:reviewId/images", requireAuth, checkIfReviewExists, checkIfReview
 
     const review = await Review.findByPk(reviewId);
 
-    let allReviewImages = await review.getReviewImages();
+    let allImagesFromCurrentUserReview = await review.getReviewImages();
 
     const err = {}
-    if (allReviewImages.length >= 10) {
-        err.title = "Cannot add more than 10 images per review";
-        err.message = "Maximum number of images for this resource was reached";
+
+    if (allImagesFromCurrentUserReview.length >= 10) {
+        err.title = "Maximum number of images for this resource was reached";
+        err.message = "Users are not allowed to add more than 10 images per review";
         err.status = 403;
         return next(err)
     };
 
-    const newReviewImage = await review.createReviewImage({
+    const newReviewImageFromCurrentUser = await review.createReviewImage({
         url
     });
 
     res.json({
-        id: newReviewImage.id,
-        url: newReviewImage.url
+        id: newReviewImageFromCurrentUser.id,
+        url: newReviewImageFromCurrentUser.url
     });
-})
-;
+});
+
+
 //Edit an existing review based on review id - URL: /api/reviews/:reviewId
 router.put('/:reviewId', requireAuth, checkIfReviewExists, checkIfReviewBelongsToUser, reviewCheckValidator, async (req, res, next) => {
 
     const { reviewId } = req.params;
-    const { review, stars } = req.body;
+    const { stars, review } = req.body;
 
-    let editReview = await Review.findByPk(reviewId);
+    let changeReview = await Review.findByPk(reviewId);
 
-    editReview.stars = stars;
-    editReview.review = review;
+    changeReview.stars = stars;
+    changeReview.review = review;
 
-    await editReview.save();
+    await changeReview.save();
 
-    return res.json(editReview);
+    return res.json(changeReview);
 });
 
-module.exports = router;
 
 //Delete review based on review id - URL: /api/reviews/:reviewId
 router.delete('/:reviewId', requireAuth, checkIfReviewExists, checkIfReviewBelongsToUser, async (req, res, next) => {
@@ -153,10 +154,12 @@ router.delete('/:reviewId', requireAuth, checkIfReviewExists, checkIfReviewBelon
 
     let review = await Review.findByPk(reviewId);
 
-    review.destroy();
+    await review.destroy();
 
     return res.json({
         "message": "Successfully deleted",
         "statusCode": 200
-    })
+    });
 });
+
+module.exports = router;
