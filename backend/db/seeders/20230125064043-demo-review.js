@@ -46,13 +46,13 @@ module.exports = {
       },
       {
         spotId: 5,
-        userId: 1,
+        userId: 2,
         review: 'Fake Review5',
         stars: 1,
       },
       {
         spotId: 1,
-        userId: 1,
+        userId: 2,
         review: 'Fake Review6',
         stars: 2,
       },
@@ -70,7 +70,7 @@ module.exports = {
       },
       {
         spotId: 4,
-        userId: 2,
+        userId: 1,
         review: 'Fake Review9',
         stars: 5,
       },
