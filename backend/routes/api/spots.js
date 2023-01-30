@@ -19,7 +19,7 @@ const { Op } = require('sequelize');
 // GET all spots - URL: /api/spots
 router.get('/', queryCheckValidator, async (req, res, next) => {
 
-    //deconstruct all query parameters from request
+    //deconstruct all query parameters from request, if any
     let { maxLat, minLat, maxLng, minLng, maxPrice, minPrice, page, size } = req.query
 
     // ========== page/size PAGINATION QUERY check ==========
