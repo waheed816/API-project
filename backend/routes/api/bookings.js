@@ -243,7 +243,7 @@ router.delete('/:bookingId', requireAuth, checkIfBookingExists, async (req, res,
 
     let err = {};
 
-    // Booking must belong to the current user OR the booking spot must belong to the current user
+    // Booking must belong to the current user OR the spot must belong to the current user
     if ((user.id !== booking.userId) && (user.id !== bookingSpot.ownerId)) {
         err.status = 403;
         err.title = "AUTHORIZATION DENIED";

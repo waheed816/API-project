@@ -15,7 +15,7 @@ const validateSignup = [
     .withMessage('Please provide a firstname'),
   check('lastName')
     .notEmpty()
-    .withMessage('Pleasee provide a lastname'),
+    .withMessage('Please provide a lastname'),
   check('email', "Please provide an email")
     .notEmpty()
     .bail()

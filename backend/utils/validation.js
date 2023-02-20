@@ -7,14 +7,15 @@ const handleValidationErrors = (req, _res, next) => {
   const validationErrors = validationResult(req);
 
   if (!validationErrors.isEmpty()) {
-    const errors = validationErrors
+    const errors = {};
+    validationErrors
       .array()
-      .map((error) => `${error.msg}`);
+      .forEach(error => errors[error.param] = error.msg);
 
-    const err = Error('Bad request.');
+    const err = Error("Bad request.");
     err.errors = errors;
     err.status = 400;
-    err.title = 'Bad request.';
+    err.title = "Bad request.";
     next(err);
   }
   next();
@@ -40,11 +41,11 @@ const queryCheckValidator = [
   check("maxPrice")
     .optional()
     .isFloat({ min: 0 })
-    .withMessage("Maximum price must be greater or equal to 0"),
+    .withMessage("Maximum price must be greater than or equal to 0"),
   check("minPrice")
     .optional()
     .isFloat({ min: 0 })
-    .withMessage("Minimum price must be greater or equal to 0"),
+    .withMessage("Minimum price must be greater than or equal to 0"),
   check("page")
     .optional({ nullable: true })
     .isInt({ min: 1 })
