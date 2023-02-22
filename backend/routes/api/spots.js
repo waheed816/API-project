@@ -626,7 +626,7 @@ router.post('/:spotId/bookings', requireAuth, checkSpot, checkIfBookingBySpotOwn
         //DESIRED START DATE-------RESERVED START DATE-------RESERVED END DATE-------DESIRED START DATE
         if ((reservedStartDate > startDate) && (reservedEndDate < endDate)) {
 
-                err.errors = [{ datesConflict: "There is an existing booking in between your start and end dates" }];
+                err.errors = { datesConflict: "There is an existing booking in between your start and end dates" };
 
                 return next(err);
 
@@ -635,12 +635,12 @@ router.post('/:spotId/bookings', requireAuth, checkSpot, checkIfBookingBySpotOwn
         }else if (((reservedStartDate <= startDate) && (reservedEndDate >= startDate)) &&
                     ((reservedStartDate <= endDate) && (reservedEndDate >= endDate))){
 
-                        err.errors = [
+                        err.errors = {
 
-                            { startDate: "Start date conflicts with an existing booking" },
-                            { endDate: "End date conflicts with an existing booking" }
+                            startDate: "Start date conflicts with an existing booking",
+                            endDate: "End date conflicts with an existing booking"
 
-                        ];
+                        };
 
                         return next(err);
 
@@ -648,7 +648,7 @@ router.post('/:spotId/bookings', requireAuth, checkSpot, checkIfBookingBySpotOwn
         //RESERVED START DATE-------DESIRED START DATE-------RESERVED END DATE
         }else if ((reservedStartDate <= startDate) && (reservedEndDate >= startDate)) {
 
-            err.errors = [{ startDate: "Start date conflicts with an existing booking" }];
+            err.errors = { startDate: "Start date conflicts with an existing booking" };
 
             return next(err);
 
@@ -656,7 +656,7 @@ router.post('/:spotId/bookings', requireAuth, checkSpot, checkIfBookingBySpotOwn
         //RESERVED START DATE-------DESIRED END DATE-------RESERVED END DATE
         }else if ((reservedStartDate <= endDate) && (reservedEndDate >= endDate)) {
 
-            err.errors = [{ endDate: "End date conflicts with an existing booking" }];
+            err.errors = { endDate: "End date conflicts with an existing booking" };
 
             return next(err);
         }
