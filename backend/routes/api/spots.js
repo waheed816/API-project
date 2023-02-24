@@ -276,22 +276,22 @@ router.get('/:spotId', checkSpot, async (req, res, next) => {
 
     spotInfo = spotInfo.toJSON();
 
-    let count = await Review.count({
+    let totalReviews = await Review.count({
         where: {
-            spotId: spotId
+            spotId
         }
     });
 
-    spotInfo.numReviews = count;
+    spotInfo.numReviews = totalReviews;
 
-    let sum = await Review.sum('stars', {
+    let totalStars = await Review.sum('stars', {
         where: {
-            spotId: spotId
+            spotId
         }
     });
 
-    if (sum / count) {
-        spotInfo.avgStarRating = sum / count;
+    if (totalStars / totalReviews) {
+        spotInfo.avgStarRating = totalStars / totalReviews;
     } else {
         spotInfo.avgStarRating = "No current ratings";
     };
@@ -327,6 +327,8 @@ router.post('/', requireAuth, spotCheckValidator, async (req, res, next) => {
     newSpotInfo.ownerId = user.id;
 
     const newSpotCreated = await Spot.create(newSpotInfo);
+
+    res.status(201);
 
     return res.json(newSpotCreated);
 });

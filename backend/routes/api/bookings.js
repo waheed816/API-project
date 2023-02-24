@@ -130,6 +130,7 @@ router.put('/:bookingId', requireAuth, checkIfBookingExists, checkIfBookingByCur
 
     //BOOKING CANNOT BE PAST THEIR ORIGINAL END DATE
     if (originalBookingEndDate < new Date()) {
+        console.log(originalBookingEndDate)
         err.status = 403;
         err.title = "Can't edit a booking that's past the end date";
         err.message = "Past bookings can't be modified";
@@ -141,10 +142,12 @@ router.put('/:bookingId', requireAuth, checkIfBookingExists, checkIfBookingByCur
         (endDate.getTime() === originalBookingEndDate.getTime())){
         err.status = 403;
         err.title = "DUPLICATE BOOKING ATTEMPT"
-        err.errors = [
-            {startDate: "You have entered the same start date as your own original booking that you're trying to edit"},
-            {endDate: "You have entered the same end date as your own original booking that you're trying to edit"}
-        ];
+        err.errors =
+            {
+            startDate: "You have entered the same start date as your own original booking that you're trying to edit",
+            endDate: "You have entered the same end date as your own original booking that you're trying to edit"
+            }
+        ;
         return next(err);
     }
 
