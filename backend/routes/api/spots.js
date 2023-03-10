@@ -424,7 +424,9 @@ router.get('/:spotId/reviews', checkSpot, async (req, res, next) => {
     });
 
     if (!reviews.length) {
-        return res.json("There are no reviews for this specified spot")
+        return res.json({
+            message: "There are no reviews for this specified spot"
+        })
     };
 
     let reviewsResults = [];

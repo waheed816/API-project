@@ -70,16 +70,6 @@ const spotCheckValidator = [
   check("country")
       .notEmpty()
       .withMessage("Country is required"),
-  check("lat", "Must enter a latitude")
-      .notEmpty()
-      .bail()
-      .isFloat({ min: -90, max: 90 })
-      .withMessage("Must enter a latitude value between -90 and 90"),
-  check("lng", "Must enter a longtitude")
-      .notEmpty()
-      .bail()
-      .isFloat({ min: -180, max: 180 })
-      .withMessage("Must enter a longtitude value between -180 and 180"),
   check("name", "Name is required")
       .notEmpty()
       .bail()

@@ -37,7 +37,9 @@ router.get('/current', requireAuth, async (req, res, next) => {
     });
 
     if (!reviews.length) {
-        return res.json("There are no reviews by the current user")
+        return res.json({
+            message: "There are no reviews by the current user"
+        })
     };
 
     let reviewsResults = [];
