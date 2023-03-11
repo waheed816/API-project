@@ -19,9 +19,10 @@ router.use('/bookings', bookingsRouter);
 router.use('/spot-images', spotImagesRouter);
 router.use('/review-images', reviewImagesRouter);
 
-// router.post('/test', function(req, res) {
-//     res.json({ requestBody: req.body });
-// });
+//testing route for front end AUTHME phases
+router.post('/test', function(req, res) {
+    res.json({ requestBody: req.body });
+});
 
 // // GET /api/set-token-cookie
 // const { setTokenCookie } = require('../../utils/auth.js');
