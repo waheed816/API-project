@@ -26,11 +26,14 @@ function SignupFormPage() {
       return dispatch(sessionActions.signup({ email, username, firstName, lastName, password }))
         .catch(async (res) => {
           const data = await res.json();
+          //console.log("DATA ERRORS FROM BACKEND:", data.errors)
           if (data && data.errors) setErrors(data.errors);
         });
     }
     return setErrors(['Confirm Password field must be the same as the Password field']);
   };
+
+  //console.log("ERRORS STATE IN FRONT END:", errors)
 
   return (
     <form onSubmit={handleSubmit}>
