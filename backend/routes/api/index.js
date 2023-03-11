@@ -19,7 +19,7 @@ router.use('/bookings', bookingsRouter);
 router.use('/spot-images', spotImagesRouter);
 router.use('/review-images', reviewImagesRouter);
 
-//testing route for front end AUTHME phases
+//testing route for front end AUTH-ME phases
 router.post('/test', function(req, res) {
     res.json({ requestBody: req.body });
 });
