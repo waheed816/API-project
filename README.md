@@ -1,4 +1,4 @@
-# `<name of application here>`
+# `AIR BnB Full Stack Application`
 
 ## Database Schema Design
 

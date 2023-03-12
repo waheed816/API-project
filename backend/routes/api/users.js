@@ -56,7 +56,7 @@ router.post('/', validateSignup, async (req, res, next) => {
         err.status = 403;
         err.title = "VALIDATION ERROR"
         err.message = "User already exists";
-        err.errors = {email: "User with that email already exists"};
+        err.errors = ["An account with that email already exists"];
 
         return next(err);
       }
@@ -65,7 +65,7 @@ router.post('/', validateSignup, async (req, res, next) => {
         err.status = 403;
         err.title = "VALIDATION ERROR";
         err.message = "User already exists";
-        err.errors = {username: "User with that username already exists"};
+        err.errors = ["An account with that username already exists"];
 
         return next(err)
       }
@@ -75,12 +75,13 @@ router.post('/', validateSignup, async (req, res, next) => {
       await setTokenCookie(res, user);
 
       return res.json({
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        username: user.username,
-        token: ""
+        user
+        // id: user.id,
+        // firstName: user.firstName,
+        // lastName: user.lastName,
+        // email: user.email,
+        // username: user.username,
+        //token: ""
       });
     }
 );

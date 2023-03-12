@@ -27,6 +27,7 @@ router.post('/',  validateLogin, async (req, res, next) => {
         err.status = 401;
         err.title = "UNAUTHORIZED LOGIN"
         err.message = "Invalid credentials"
+        err.errors = ["UNAUTHORIZED LOGIN: Please check username and password"]
         return next(err);
       }
 
@@ -49,7 +50,7 @@ router.delete('/', (_req, res) => {
 router.get('/', restoreUser, (req, res) => {
   const { user } = req;
   if (user) {
-    console.log(user)
+    //console.log(user)
     return res.json({
       user //.toSafeObject()
     });

@@ -282,6 +282,10 @@ router.get('/:spotId', checkSpot, async (req, res, next) => {
         }
     });
 
+
+    //spotInfo.numReviews = count;
+
+
     spotInfo.numReviews = totalReviews;
 
     let totalStars = await Review.sum('stars', {
@@ -302,6 +306,9 @@ router.get('/:spotId', checkSpot, async (req, res, next) => {
         },
         attributes: ['id', 'url', 'preview']
     });
+
+
+    //console.log(spotImages.length);
 
     if (spotImages.length > 0) {
         spotInfo.SpotImages = spotImages;
