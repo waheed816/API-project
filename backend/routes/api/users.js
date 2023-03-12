@@ -15,7 +15,7 @@ const validateSignup = [
     .withMessage('Please provide a firstname'),
   check('lastName')
     .notEmpty()
-    .withMessage('Pleasee provide a lastname'),
+    .withMessage('Please provide a lastname'),
   check('email', "Please provide an email")
     .notEmpty()
     .bail()
@@ -58,7 +58,7 @@ router.post('/', validateSignup, async (req, res, next) => {
         err.message = "User already exists";
         err.errors = ["An account with that email already exists"];
 
-        return next(err)
+        return next(err);
       }
 
       if (doesUsernameExist) {

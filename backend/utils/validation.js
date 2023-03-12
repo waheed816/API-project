@@ -7,14 +7,15 @@ const handleValidationErrors = (req, _res, next) => {
   const validationErrors = validationResult(req);
 
   if (!validationErrors.isEmpty()) {
-    const errors = validationErrors
+    const errors = {};
+    validationErrors
       .array()
-      .map((error) => `${error.msg}`);
+      .forEach(error => errors[error.param] = error.msg);
 
-    const err = Error('Bad request.');
+    const err = Error("Validation Error");
     err.errors = errors;
     err.status = 400;
-    err.title = 'Bad request.';
+    err.title = "VALIDATION ERROR";
     next(err);
   }
   next();
@@ -40,11 +41,11 @@ const queryCheckValidator = [
   check("maxPrice")
     .optional()
     .isFloat({ min: 0 })
-    .withMessage("Maximum price must be greater or equal to 0"),
+    .withMessage("Maximum price must be greater than or equal to 0"),
   check("minPrice")
     .optional()
     .isFloat({ min: 0 })
-    .withMessage("Minimum price must be greater or equal to 0"),
+    .withMessage("Minimum price must be greater than or equal to 0"),
   check("page")
     .optional({ nullable: true })
     .isInt({ min: 1 })
@@ -69,16 +70,6 @@ const spotCheckValidator = [
   check("country")
       .notEmpty()
       .withMessage("Country is required"),
-  check("lat", "Must enter a latitude")
-      .notEmpty()
-      .bail()
-      .isFloat({ min: -90, max: 90 })
-      .withMessage("Must enter a latitude value between -90 and 90"),
-  check("lng", "Must enter a longtitude")
-      .notEmpty()
-      .bail()
-      .isFloat({ min: -180, max: 180 })
-      .withMessage("Must enter a longtitude value between -180 and 180"),
   check("name", "Name is required")
       .notEmpty()
       .bail()
