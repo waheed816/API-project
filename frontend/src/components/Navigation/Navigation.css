@@ -1,3 +1,68 @@
 .hidden {
     display: none
 }
+.logo-text{
+    transform: rotate(180deg);
+    color: white;
+    padding: 3px;
+    border: 3px solid white;
+    border-radius: 21px;
+    font-size: 17px;
+
+ }
+
+
+ .logo-left{
+    transform: rotate(90deg);
+    font-size: 21px;
+    color: white;
+ }
+
+
+ .logo-right{
+    transform: rotate(-90deg);
+    font-size: 21px;
+    color: white;
+ }
+
+
+ .nav-bar {
+    width: 100%;
+    position: sticky;
+    box-sizing: border-box;
+    top: 0px;
+    background-color: navy;
+    border-bottom: 5px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 3px 5px;
+ }
+
+
+ .nav-bar-contents {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+    padding: 3px 7px;
+ }
+
+
+ .nav-bar-left {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+ }
+
+
+ .profile-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-sizing: border-box;
+    margin: 10px;
+ }

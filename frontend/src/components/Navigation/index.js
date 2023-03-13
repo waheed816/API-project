@@ -5,21 +5,30 @@ import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import './Navigation.css';
 
+
 function Navigation({ isLoaded }){
   const sessionUser = useSelector(state => state.session.user);
 
+
   return (
-    <ul>
-      <li>
-        <NavLink exact to="/">Home</NavLink>
-      </li>
-      {isLoaded && (
-        <li>
-          <ProfileButton user={sessionUser} />
-        </li>
-      )}
-    </ul>
+    <div className='nav-bar'>
+      <div className='nav-bar-contents'>
+        <div className='nav-bar-left'>
+          <NavLink exact to="/">
+            <i className="logo-left fa-solid fa-brands fa-airbnb"></i>
+            <i className="fa-solid logo-text"><h2>AIRXYZ</h2></i>
+            <i className="logo-right fa-solid fa-brands fa-airbnb"></i>
+          </NavLink>
+        </div>
+        {isLoaded && (
+          <div className='profile-button'>
+            <ProfileButton user={sessionUser} />
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
+
 
 export default Navigation;
