@@ -24,9 +24,12 @@
     font-family:  'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
     font-weight: bolder;
     color: orange;
-    justify-content: center;
+    text-align: left;
     height: 100%;
     font-style: oblique;
+    font-size:xx-small;
+    margin-top: 3px;
+    margin-left: 3px;
 }
 
 .signup-input {
@@ -36,14 +39,14 @@
     justify-content: center;
     margin-top: 17px;
     height: 100%;
-    text-align: center;
+    text-align: left;
     padding-left: 33px;
     padding-right: 33px;
 }
 
 .signup-input-box{
     margin-top: 3px;
-    width: 173px;
+    width: 225px;
     border: solid 3px navy;
     border-radius: 5px;
     justify-content: center;

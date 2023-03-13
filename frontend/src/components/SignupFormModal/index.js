@@ -14,7 +14,7 @@ function SignupFormModal() {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState({});
   const [emptyField, setEmptyField] = useState('true');
   const { closeModal } = useModal();
 
@@ -37,8 +37,9 @@ function SignupFormModal() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const validationError = {};
     if (password === confirmPassword) {
-      setErrors([]);
+      setErrors({});
       return dispatch(sessionActions.signup({ email, username, firstName, lastName, password }))
         .then(closeModal)
         .catch(async (res) => {
@@ -46,8 +47,11 @@ function SignupFormModal() {
           if (data && data.errors) setErrors(data.errors);
         });
     }
-    return setErrors(['Password and Confirm Password does not match']);
+    validationError.password = "PASSWORDS DID NOT MACTH"
+    return setErrors(validationError);
   };
+
+  //console.log(errors)
 
   return (
     <div className="signup-form-container">
@@ -56,9 +60,9 @@ function SignupFormModal() {
       <i className="login-logo-right fa-solid fa-brands fa-airbnb"></i>
       <h1 className="signup-title">Sign Up</h1>
       <form onSubmit={handleSubmit}>
-        <ul className="signup-input">
+        {/* <ul className="signup-input">
           {errors.map((error, idx) => <div key={idx} className='signup-errors'>{error}</div>)}
-        </ul>
+        </ul> */}
         <div className="signup-input">
           <label>
             Email
@@ -71,6 +75,7 @@ function SignupFormModal() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+            <div className="signup-errors">{errors.email}</div>
           </div>
         </div>
         <div className="signup-input">
@@ -85,6 +90,7 @@ function SignupFormModal() {
               onChange={(e) => setUsername(e.target.value)}
               required
             />
+            <div className="signup-errors">{errors.username}</div>
           </div>
         </div>
         <div className="signup-input">
@@ -127,6 +133,7 @@ function SignupFormModal() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <div className="signup-errors">{errors.password}</div>
           </div>
         </div>
         <div className="signup-input">
@@ -141,6 +148,7 @@ function SignupFormModal() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
+            <div className="signup-errors">{errors.password}</div>
           </div>
         </div>
         <div className="signup-button-container">
