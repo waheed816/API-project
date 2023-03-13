@@ -1,0 +1,107 @@
+.login-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    border: solid 5px navy;
+    padding: 10px;
+
+}
+
+.login-title {
+    font-family:  'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    border-bottom: 3px solid navy;
+    font-size: 20px;
+    padding-bottom: 10px;
+    color: navy;
+}
+
+.login-error{
+    font-family:  'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-weight: bolder;
+    color: orange;
+    justify-content: center;
+    margin-top: 23px;
+    height: 100%;
+    font-style: oblique;
+}
+
+.login-input {
+    font-family:  'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-weight: bolder;
+    color: navy;
+    justify-content: center;
+    margin-top: 23px;
+    height: 100%;
+    text-align: center;
+    padding-left: 33px;
+    padding-right: 33px;
+}
+
+.input-box{
+    margin-top: 7px;
+    width: 173px;
+    border: solid 3px navy;
+    border-radius: 5px;
+    justify-content: center;
+}
+
+.login-submit-button{
+    font-family: 'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: navy;
+    background-color:white;
+    border: 3px solid navy;
+    cursor: pointer;
+    padding: 3px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.login-disabled{
+    font-family: 'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: lightgray;
+    background-color:white;
+    border: 3px solid lightgray;
+    cursor: not-allowed;
+    padding: 3px;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.login-button-container{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.login-logo-text{
+    transform: rotate(180deg);
+    color: navy;
+    padding: 3px;
+    border: 3px solid navy;
+    border-radius: 21px;
+    font-size: 7px;
+ }
+
+ .login-logo-left{
+    transform: rotate(90deg);
+    font-size: 13px;
+    color: navy;
+ }
+
+
+ .login-logo-right{
+    transform: rotate(-90deg);
+    font-size: 13px;
+    color: navy;
+ }

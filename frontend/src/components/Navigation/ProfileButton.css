@@ -1,0 +1,116 @@
+.profile-dropdown {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    height: fit-content;
+    min-width: 120px;
+    width: fit-content;
+
+    border-radius: 13px;
+    border: 3px solid white;
+    margin: 8px;
+    list-style: none;
+    position: absolute;
+    top: 61px;
+    right: 21px;
+    background-color: navy;
+    padding: 5px;
+    font-family: 'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+    font-weight: bolder;
+    color: white;
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    width: fit-content;
+    height: fit-content;
+    font-family: 'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+    font-weight: bolder;
+    color: white;
+    padding: 5px;
+    cursor: default;
+}
+
+.login-signup{
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.login-button{
+    font-family: 'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-size: 21px;
+    font-weight: bold;
+    color: navy;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.username-container{
+    margin-top: 10px;
+    margin-bottom: 13px;
+}
+
+.name-container{
+    margin-top: 13px;
+    margin-bottom: 13px;
+}
+
+.email-container{
+    margin-top: 13px;
+    margin-bottom: 13px;
+}
+
+.signup-button{
+    font-family: 'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-size: 21px;
+    font-weight: bold;
+    color: navy;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 5px;
+
+    border-radius: 10px;
+}
+
+.logout-button{
+    background-color: white;
+    font-family: 'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: navy;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.profile-button-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    cursor: default;
+}
+
+
+.profile-button {
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 17px;
+    color: navy;
+    font-size: 41px;
+    cursor: pointer;
+ }
+
+ .fa-bars{
+    padding-left: 5px;
+ }

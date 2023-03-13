@@ -5,6 +5,7 @@ import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
+import './ProfileButton.css'
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -18,7 +19,6 @@ function ProfileButton({ user }) {
 
   useEffect(() => {
     if (!showMenu) return;
-
     const closeMenu = (e) => {
       if (!ulRef.current.contains(e.target)) {
         setShowMenu(false);
@@ -41,37 +41,61 @@ function ProfileButton({ user }) {
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
   return (
-    <>
-      <button onClick={openMenu}>
-        <i className="fas fa-user-circle" />
+    <div className="profile-button-container">
+
+      <button onClick={openMenu} className="profile-button">
+        <i className="fas fa-user-circle" id='profile-button-id'/>
+        {showMenu === false && <i className="fa-solid fa-bars"></i>}
       </button>
-      <ul className={ulClassName} ref={ulRef}>
+
+      <div className={ulClassName} ref={ulRef}>
         {user ? (
-          <>
-            <li>{user.username}</li>
-            <li>{user.firstName} {user.lastName}</li>
-            <li>{user.email}</li>
-            <li>
-              <button onClick={logout}>Log Out</button>
-            </li>
-          </>
+
+          <div className="profile-container">
+            <div className="username-container">
+              <div>USERNAME:</div>
+              <div>{user.username}</div>
+            </div>
+
+            <div className="name-container">
+              <div>NAME:</div>
+              <div>{user.firstName} {user.lastName}</div>
+            </div>
+
+            <div className="email-container">
+              <div>EMAIL:</div>
+              <div>{user.email}</div>
+            </div>
+
+
+            <p>
+              <button className="logout-button" onClick={logout}>LOGOUT</button>
+            </p>
+          </div>
+
         ) : (
           <>
-            <OpenModalMenuItem
-              itemText="Log In"
-              onItemClick={closeMenu}
-              modalComponent={<LoginFormModal />}
-            />
-            <OpenModalMenuItem
-              itemText="Sign Up"
-              onItemClick={closeMenu}
-              modalComponent={<SignupFormModal />}
-            />
+            <button className="login-button">
+              <OpenModalMenuItem
+                className="login"
+                itemText="LOGIN"
+                onItemClick={closeMenu}
+                modalComponent={<LoginFormModal />}
+              />
+            </button>
+            <button className="signup-button">
+              <OpenModalMenuItem
+                itemText="SIGN UP"
+                onItemClick={closeMenu}
+                modalComponent={<SignupFormModal />}
+              />
+            </button>
           </>
         )}
-      </ul>
-    </>
+      </div>
+    </div>
   );
 }
+
 
 export default ProfileButton;
