@@ -9,7 +9,7 @@ function LoginFormModal() {
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState({});
   const [emptyField, setEmptyField] = useState('true');
 
   const { closeModal } = useModal();
@@ -46,10 +46,8 @@ function LoginFormModal() {
         <i className="login-logo-right fa-solid fa-brands fa-airbnb"></i>
         <h1 className="login-title">Log In</h1>
         <form onSubmit={handleSubmit}>
-          <div className="login-error">
-            {errors.map((error, idx) => (
-              <p key={idx}>{error}</p>
-            ))}
+          <div className="login-error-message">
+            {errors.loginError}
           </div>
           <div className="login-input">
             <label>
@@ -63,6 +61,7 @@ function LoginFormModal() {
                 onChange={(e) => setCredential(e.target.value)}
                 required
               />
+              <div className="login-errors">{errors.username}</div>
              </div>
           </div>
           <div className="login-input">
@@ -77,6 +76,7 @@ function LoginFormModal() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              <div className="login-errors">{errors.password}</div>
             </div>
           </div>
           <div className="login-button-container">
