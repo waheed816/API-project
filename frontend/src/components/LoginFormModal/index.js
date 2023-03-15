@@ -42,11 +42,11 @@ function LoginFormModal() {
 
       <div className="login-form-container">
         <i className="login-logo-left fa-solid fa-brands fa-airbnb"></i>
-        <i className="fa-solid login-logo-text"><h2>AIRXYZ</h2></i>
+        <i className="fa-solid login-logo-text"><h2>CLONE-CNC</h2></i>
         <i className="login-logo-right fa-solid fa-brands fa-airbnb"></i>
         <h1 className="login-title">Log In</h1>
         <form onSubmit={handleSubmit}>
-          <div className="login-error-message">
+          <div className={errors.loginError ? "login-error-message" : "no-class-name"}>
             {errors.loginError}
           </div>
           <div className="login-input">

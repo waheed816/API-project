@@ -56,7 +56,7 @@ function SignupFormModal() {
   return (
     <div className="signup-form-container">
       <i className="login-logo-left fa-solid fa-brands fa-airbnb"></i>
-      <i className="fa-solid login-logo-text"><h2>AIRXYZ</h2></i>
+      <i className="fa-solid login-logo-text"><h2>CLONE-CNC</h2></i>
       <i className="login-logo-right fa-solid fa-brands fa-airbnb"></i>
       <h1 className="signup-title">Sign Up</h1>
       <form onSubmit={handleSubmit}>
