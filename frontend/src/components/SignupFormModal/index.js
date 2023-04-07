@@ -22,11 +22,11 @@ function SignupFormModal() {
   useEffect(() => {
 
     if(email.length === 0 ||
-      username.length === 0 ||
+      username.length < 4 ||
       firstName.length === 0 ||
       lastName.length === 0 ||
-      password.length === 0 ||
-      confirmPassword.length === 0){
+      password.length < 6 ||
+      confirmPassword !== password){
 
       setEmptyField(true);
 
@@ -56,9 +56,9 @@ function SignupFormModal() {
   return (
     <div className="signup-form-container">
       <i className="login-logo-left fa-solid fa-brands fa-airbnb"></i>
-      <i className="fa-solid login-logo-text"><h2>CLONE-CNC</h2></i>
+      <i className="fa-solid login-logo-text"><h2>SIGN-UP</h2></i>
       <i className="login-logo-right fa-solid fa-brands fa-airbnb"></i>
-      <h1 className="signup-title">Sign Up</h1>
+      {/* <h1 className="signup-title">Sign Up</h1> */}
       <form onSubmit={handleSubmit}>
         {/* <ul className="signup-input">
           {errors.map((error, idx) => <div key={idx} className='signup-errors'>{error}</div>)}
@@ -72,6 +72,7 @@ function SignupFormModal() {
               className="signup-input-box"
               type="text"
               value={email}
+              placeholder="required"
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -87,6 +88,7 @@ function SignupFormModal() {
               className="signup-input-box"
               type="text"
               value={username}
+              placeholder="must be at least 4 characters"
               onChange={(e) => setUsername(e.target.value)}
               required
             />
@@ -102,6 +104,7 @@ function SignupFormModal() {
               className="signup-input-box"
               type="text"
               value={firstName}
+              placeholder="required"
               onChange={(e) => setFirstName(e.target.value)}
               required
             />
@@ -116,6 +119,7 @@ function SignupFormModal() {
               className="signup-input-box"
               type="text"
               value={lastName}
+              placeholder="required"
               onChange={(e) => setLastName(e.target.value)}
               required
             />
@@ -130,9 +134,11 @@ function SignupFormModal() {
               className="signup-input-box"
               type="password"
               value={password}
+              placeholder="must be at least 6 characters"
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+
             <div className="signup-errors">{errors.password}</div>
           </div>
         </div>
@@ -145,9 +151,11 @@ function SignupFormModal() {
               className="signup-input-box"
               type="password"
               value={confirmPassword}
+              placeholder="must match password"
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
+            {password !== confirmPassword && <div className="signup-errors">DOES NOT MATCH PASSWORD</div>}
             <div className="signup-errors">{errors.password}</div>
           </div>
         </div>

@@ -1,12 +1,14 @@
+#modal-content {
+    border-radius: 15px;
+}
+
 .login-form-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: fit-content;
-    border: solid 5px navy;
-    padding: 10px;
-
+    padding: 17px;
 }
 
 .login-title {
@@ -62,19 +64,43 @@
     border: solid 3px navy;
     border-radius: 5px;
     justify-content: center;
+    height: 33px;
+    font-size: large;
 }
 
 .login-submit-button{
     font-family: 'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
     font-size: 14px;
     font-weight: bold;
-    color: navy;
-    background-color:white;
-    border: 3px solid navy;
+    color: white;
+    background-color: red;
+    border: 3px solid white;
     cursor: pointer;
     padding: 3px;
     border-radius: 10px;
     margin-top: 15px;
+    width: 181px;
+    height: 53px;
+    font-size: 27px;
+}
+
+.demo-button-container{
+    margin-top: 23px;
+}
+
+.demo-user-login{
+    font-family: 'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: navy;
+    cursor: pointer;
+    padding: 11px;
+    border-radius: 10px;
+    margin: 15px;
+    height: 53px;
+    font-size: 13px;
+    text-decoration: none;
 }
 
 .login-disabled{
@@ -88,6 +114,8 @@
     padding: 3px;
     border-radius: 10px;
     margin-top: 15px;
+    width: 181px;
+    height: 53px;
 }
 
 .login-button-container{
@@ -99,12 +127,16 @@
 }
 
 .login-logo-text{
-    transform: rotate(180deg);
-    color: navy;
+    /* transform: rotate(180deg); */
+    background-color: navy;
+    color: white;
     padding: 3px;
     border: 3px solid navy;
     border-radius: 21px;
     font-size: 7px;
+    width: 99px;
+    text-align: center;
+    /* font-size: 17px; */
  }
 
  .login-logo-left{

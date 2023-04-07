@@ -7,7 +7,7 @@ import './AllSpots.css';
 
 const generatePreviewImage = (previewImage) => {
     if(previewImage === "There are no preview images for this spot"){
-        previewImage= "https://www.guesty.com/wp-content/uploads/2019/09/seo-house-2.svg";
+        previewImage= "https://st2.depositphotos.com/1000507/50672/v/600/depositphotos_506729114-stock-illustration-photo-allowed-restaurant-protect-privacy.jpg";
         return previewImage;
     }else
         return previewImage;
@@ -15,22 +15,37 @@ const generatePreviewImage = (previewImage) => {
 
 function AllSpots() {
 
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  const spots = Object.values(useSelector(state => state.spots.allSpots));
+    const spots = Object.values(useSelector(state => state.spots.allSpots));
 
-  useEffect(() => {
-    dispatch(thunkGetAllSpots());
-  }, [dispatch])
+    useEffect(() => {
+        dispatch(thunkGetAllSpots());
+    }, [dispatch])
+
+    //USE THIS OR CODE BREAKS!!!
+    if(!Object.keys(spots).length){
+        return(
+            <i className="fa-solid fa-truck-ramp-box spot-info-loading">LOADING...</i>
+        )
+    }
 
   return (
     <div className="all-spots-container">
       {spots.map(spot =>
         <NavLink to={`/spots/${spot.id}`} key={spot.id} className="spot-container">
             <div className="spot-info-container">
-                <p className='spot-image-container'>
-                    <img src={generatePreviewImage(spot.previewImage)} alt={spot.name}/>
-                </p>
+                <div className='spot-image-container'>
+                    <img
+                        className="all-spots-image"
+                        src={generatePreviewImage(spot.previewImage)}
+                        onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "https://st3.depositphotos.com/26272052/33085/v/600/depositphotos_330852614-stock-illustration-color-delete-folder-icon-isolated.jpg"
+                        }}
+                        alt={`${spot.name}'s photo unavailable`}>
+                    </img>
+                </div>
                 <p className="spot-info">
                     <strong>{spot.name}</strong>
                 </p>
@@ -38,14 +53,15 @@ function AllSpots() {
                     {spot.city}, {spot.state}
                 </p>
                 <p className="spot-info">
-                    {spot.avgRating === "There are no current ratings for this spot" ? 'New' :
+                    <i className="fa-solid fa-star"></i>
+                    {spot.avgRating === "There are no current ratings for this spot" ? ' New' :
                     <>
-                        <i className="fa-solid fa-star"></i>{spot.avgRating}
+                        {` ${spot.avgRating} stars`}
                     </>
                     }
                 </p>
                 <p className="spot-info">
-                    <strong>${spot.price}</strong> per day
+                    <strong>${spot.price}</strong>/night
                 </p>
             </div>
         </NavLink>)}

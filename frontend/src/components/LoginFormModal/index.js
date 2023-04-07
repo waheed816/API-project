@@ -1,5 +1,6 @@
 // frontend/src/components/LoginFormModal/index.js
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
@@ -16,7 +17,7 @@ function LoginFormModal() {
 
   useEffect(() => {
 
-    if(password.length === 0 || credential.length === 0){
+    if(password.length < 6 || credential.length < 4){
 
       setEmptyField(true);
 
@@ -38,13 +39,18 @@ function LoginFormModal() {
       );
   };
 
-  return (
+  const demoUserLogin = (e) => {
+    e.preventDefault();
+    return dispatch(sessionActions.login({ credential: 'Demo-lition', password: 'password' }))
+      .then(closeModal)
+  }
 
+  return (
       <div className="login-form-container">
         <i className="login-logo-left fa-solid fa-brands fa-airbnb"></i>
-        <i className="fa-solid login-logo-text"><h2>CLONE-CNC</h2></i>
+        <i className="fa-solid login-logo-text"><h2>LOGIN</h2></i>
         <i className="login-logo-right fa-solid fa-brands fa-airbnb"></i>
-        <h1 className="login-title">Log In</h1>
+        {/* <h1 className="login-title">Log In</h1> */}
         <form onSubmit={handleSubmit}>
           <div className={errors.loginError ? "login-error-message" : "no-class-name"}>
             {errors.loginError}
@@ -87,6 +93,9 @@ function LoginFormModal() {
             >
               LOGIN
             </button>
+          <div className="demo-button-container">
+            <Link to='/' onClick={demoUserLogin} className='demo-user-login'>DEMO USER LOGIN</Link>
+          </div>
           </div>
         </form>
       </div>
