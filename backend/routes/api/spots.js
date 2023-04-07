@@ -143,7 +143,7 @@ router.get('/', queryCheckValidator, async (req, res, next) => {
         spot.Reviews.forEach((review) => {
             totalStars += Number(review.stars)
         })
-        
+
         let avg = totalStars / totalReviews;
 
         if (!avg) {
@@ -295,11 +295,17 @@ router.get('/:spotId', checkSpot, async (req, res, next) => {
         }
     });
 
-    if (totalStars / totalReviews) {
-        spotInfo.avgStarRating = totalStars / totalReviews;
+    // console.log("sffsdffsdfsff", typeof(spotInfo.numReviews))
+    // console.log("sffsdffsdfsff", typeof(totalStars));
+    // console.log("sffsdffsdfsff", typeof(totalReviews));
+
+    if (Number(totalStars) / Number(totalReviews)) {
+        spotInfo.avgStarRating = Number(totalStars) / Number(totalReviews);
     } else {
         spotInfo.avgStarRating = "No current ratings";
     };
+
+    // console.log("sffsdffsdfsff", typeof(spotInfo.avgStarRating));
 
     let spotImages = await SpotImage.findAll({
         where: {
