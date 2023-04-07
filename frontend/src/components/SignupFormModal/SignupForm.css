@@ -4,9 +4,10 @@
     justify-content: center;
     align-items: center;
     width: fit-content;
-    border: solid 5px navy;
+    border: solid 5px white;
     padding: 10px;
-
+    overflow-y: auto;
+    border-radius: 13px;
 }
 
 .signup-title {
@@ -16,7 +17,7 @@
     width: 100%;
     border-bottom: 3px solid navy;
     font-size: 20px;
-    padding-bottom: 10px;
+    /* padding-bottom: 10px; */
     color: navy;
 }
 
@@ -37,7 +38,7 @@
     font-weight: bolder;
     color: navy;
     justify-content: center;
-    margin-top: 17px;
+    margin-top: 7px;
     height: 100%;
     text-align: left;
     padding-left: 33px;
@@ -50,19 +51,23 @@
     border: solid 3px navy;
     border-radius: 5px;
     justify-content: center;
+    height: 23px;
 }
 
 .signup-submit-button{
     font-family: 'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
     font-size: 14px;
     font-weight: bold;
-    color: navy;
-    background-color:white;
-    border: 3px solid navy;
+    color: white;
+    background-color:red;
+    border: 3px solid white;
     cursor: pointer;
     padding: 3px;
     border-radius: 10px;
-    margin-top: 15px;
+    /* margin-top: 15px; */
+    width: 233px;
+    height: 33px;
+    font-size: 17px;
 }
 
 .signup-disabled{
@@ -75,7 +80,10 @@
     cursor: not-allowed;
     padding: 3px;
     border-radius: 10px;
-    margin-top: 15px;
+    /* margin-top: 15px; */
+    width: 233px;
+    height: 33px;
+
 }
 
 .signup-button-container{

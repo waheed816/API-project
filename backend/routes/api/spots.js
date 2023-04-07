@@ -313,7 +313,7 @@ router.get('/:spotId', checkSpot, async (req, res, next) => {
     if (spotImages.length > 0) {
         spotInfo.SpotImages = spotImages;
     } else {
-        spotInfo.SpotImages = "There are no images for this spot"
+        spotInfo.SpotImages = [{url: "There are no images for this spot"}]
     };
 
 
