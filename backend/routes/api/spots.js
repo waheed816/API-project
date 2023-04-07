@@ -139,10 +139,11 @@ router.get('/', queryCheckValidator, async (req, res, next) => {
         let totalReviews = spot.Reviews.length;
         let totalStars = 0;
 
-        spot.Reviews.forEach((review) => {
-            totalStars += review.stars
-        })
 
+        spot.Reviews.forEach((review) => {
+            totalStars += Number(review.stars)
+        })
+        
         let avg = totalStars / totalReviews;
 
         if (!avg) {
