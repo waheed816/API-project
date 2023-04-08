@@ -56,12 +56,12 @@ function AllSpots() {
                     <i className="fa-solid fa-star"></i>
                     {spot.avgRating === "There are no current ratings for this spot" ? ' New' :
                     <>
-                        {` ${spot.avgRating} stars`}
+                        {` ${Number(spot.avgRating).toFixed(1)} stars`}
                     </>
                     }
                 </p>
                 <p className="spot-info">
-                    <strong>${spot.price}</strong>/night
+                    <strong>${Number(spot.price).toFixed(2)}</strong>/night
                 </p>
             </div>
         </NavLink>)}

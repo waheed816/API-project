@@ -1,0 +1,108 @@
+.create-spot-form-container{
+    font-family:  'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    display: flex;
+    justify-content: center;
+    padding-left: 185px;
+    padding-right: 170px;
+    margin: auto;
+    color: navy;
+    max-width: 555px;
+}
+
+
+
+.input-labels{
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 7px;
+}
+
+.input-container{
+    padding-bottom: 13px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input-fields {
+    width: 100%;
+    padding: 10px;
+    border-radius: 11px;
+    border: solid 1px navy;
+    box-sizing: border-box;
+}
+
+.create-spot-errors{
+    font-family:  'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    display: inline;
+    padding-left: 5px;
+    font-weight: bold;
+    font-size:x-small;
+    color: orange;
+    font-style: oblique;
+}
+
+.city-state-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.city-info {
+    width: 313px;
+    padding-right: 4px;
+  }
+
+
+.state-info {
+    width: 213px;
+    padding-left: 4px;
+}
+
+.border-line {
+    border-bottom: 2px solid navy;
+    margin-top: 13px;
+    margin-bottom: 21px;
+}
+
+.create-spot-text-area{
+    resize: none;
+    width: 555px;
+    height: 133px;
+    box-sizing: border-box;
+    border-radius: 7px;
+    border: solid 1px navy;
+}
+
+.submit-button-container{
+    margin: auto;
+    box-sizing: border-box;
+    width: 50%;
+    align-content: center;
+}
+
+.price-input{
+    display: flex;
+    align-items: center;
+}
+
+.dollar-sign{
+    padding-right: 5px;
+}
+
+.create-spot-button{
+    display: flex;
+    justify-content: center;
+    border: solid 1px navy;
+    border-radius: 13px;
+    background-color: red;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 35px;
+    cursor: pointer;
+    width: 100%;
+    height: 40px;
+    margin-bottom: 10px;
+    margin-top: 0px;
+}

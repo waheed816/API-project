@@ -59,6 +59,26 @@
     box-sizing: border-box;
  }
 
+ .nav-bar-right {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+ }
+
+ .create-new-spot{
+   font-family:  'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+   text-decoration: none;
+   background-color: white;
+   width: fit-content;
+   padding: 13px;
+   border-radius: 13px;
+   color: navy;
+   font-weight: bold;
+   display: flex;
+   /* flex-direction: row; */
+   box-sizing: border-box;
+   margin: 10px;
+ }
 
  .profile-button{
     display: flex;

@@ -20,12 +20,14 @@ function Navigation({ isLoaded }){
             <i className="logo-right fa-solid fa-brands fa-airbnb"></i>
           </NavLink>
         </div>
-        {/* //TODO: add spot button (if sessions.user) */}
-        {isLoaded && (
-          <div className='profile-button'>
-            <ProfileButton user={sessionUser} />
-          </div>
-        )}
+        <div className='nav-bar-right'>
+          {sessionUser ? <NavLink to='/spot/createSpotForm' className='create-new-spot'>Create a New Spot</NavLink> : null}
+          {isLoaded && (
+            <div className='profile-button'>
+              <ProfileButton user={sessionUser} />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
