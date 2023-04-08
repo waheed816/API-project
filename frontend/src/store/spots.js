@@ -5,8 +5,6 @@ import { csrfFetch } from "./csrf";
 const GET_ALL_SPOTS = 'spots/GET_ALL_SPOTS';
 const GET_SPOT_INFO = 'spots/GET_SPOT_INFO';
 
-//TODO: type for create
-
 
 
 //ACTIONS
@@ -24,7 +22,6 @@ export const actionGetSpotInfo = (spotInfo) => {
     }
 }
 
-//TODO: action for create
 
 //NORMALIZATION FUNCTIONS
 const funcNormalizeSpots = (spots) => {
@@ -68,7 +65,28 @@ export const thunkGetSpotInfo = (spotId) => async (dispatch) => {
 
 }
 
-//TODO: thunk for create
+export const thunkCreateSpot = (spot, imgArray) => async (dispatch) => {
+    const res = await csrfFetch('/api/spots',
+      {
+        method: 'POST',
+        body: JSON.stringify(spot)
+      });
+
+    if (res.ok) {
+      const spot = await res.json();
+      for (const img of imgArray) {
+        if (img.url) {
+          await csrfFetch(`/api/spots/${spot.id}/images`, {
+            method: 'POST',
+            body: JSON.stringify(img)
+          });
+        };
+      };
+      return spot;
+    };
+};
+
+
 
 
 //STATE SHAPE FOR SPOTS RELATED OBJECTS
