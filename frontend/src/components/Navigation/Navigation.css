@@ -38,7 +38,8 @@
     margin-top: 0px;
     margin-bottom: 0px;
     padding: 3px 5px;
-    z-index:1
+    z-index:1;
+    border-radius: 17px;
  }
 
 

@@ -29,11 +29,11 @@
     text-decoration: none;
 }
 
-.spot-container:active{
+/* .spot-container:active{
     transform: scale(0.98);
     box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
     border-radius: 13px;
-}
+} */
 
 .spot-info-container{
     /* border: solid navy; */
