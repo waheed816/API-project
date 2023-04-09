@@ -1,0 +1,86 @@
+.manage-create-spot-container{
+    padding-left: 53px;
+}
+
+
+.no-spots-heading{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    justify-content: left;
+    gap: 31px;
+    padding-top: 33px;
+    justify-content: left;
+    color: navy;
+
+}
+
+.manage-spots-heading{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    justify-content: left;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 233px);
+    gap: 31px;
+    padding-top: 33px;
+    justify-content: center;
+    max-width: 1221px;
+    margin: auto;
+    color: navy;
+}
+
+.manage-create-spot{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    color: white;
+    display: flex;
+    padding: 13px;
+    justify-content: center;
+    font-family:  'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    text-decoration: none;
+    background-color: red;
+    font-weight: bold;
+    border: 2px solid white;
+    width: 145px;
+    border-radius: 13px;
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    border-radius: 13px;
+}
+
+.manage-create-spot:active{
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    border-radius: 13px;
+}
+
+.update-delete-spot{
+    padding: 13px;
+}
+
+.update-spot-button{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+    background-color: white;
+    color: navy;
+    margin-right: 13px;
+    border: solid 2px navy;
+    border-radius: 7px;
+}
+
+.delete-spot-button{
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+    background-color: white;
+    color: navy;
+    margin-right: 13px;
+    border: solid 2px navy;
+    border-radius: 7px;
+}
+
+.update-spot-button:active{
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    
+}
+
+.delete-spot-button:active{
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+
+}

@@ -4,6 +4,7 @@ import { csrfFetch } from "./csrf";
 //ACTION TYPES
 const GET_ALL_SPOTS = 'spots/GET_ALL_SPOTS';
 const GET_SPOT_INFO = 'spots/GET_SPOT_INFO';
+const GET_ALL_USER_SPOTS = 'spots/GET_USER_SPOTS'
 
 
 
@@ -22,6 +23,12 @@ export const actionGetSpotInfo = (spotInfo) => {
     }
 }
 
+export const actionGetAllUserSpots = (spots) => {
+  return{
+      type: GET_ALL_USER_SPOTS,
+      spots
+  };
+}
 
 //NORMALIZATION FUNCTIONS
 const funcNormalizeSpots = (spots) => {
@@ -47,10 +54,29 @@ export const thunkGetAllSpots = () => async (dispatch) => {
     if(res.ok) {
       const spots = await res.json();
       const normalizedSpots = funcNormalizeSpots(spots.Spots);
-      dispatch(actionGetAllSpots(normalizedSpots));
+      dispatch(actionGetAllUserSpots(normalizedSpots));
       return normalizedSpots;
     };
 };
+
+export const thunkGetCurrentUserSpots = () => async (dispatch) => {
+
+  const res = await csrfFetch('/api/spots/current');
+
+  const spots = await res.json()
+
+  if(spots === "You currently do not own any spots"){
+    dispatch(actionGetAllUserSpots(spots))
+  }else{
+    const normalizedSpots = funcNormalizeSpots(spots.Spots);
+    dispatch(actionGetAllUserSpots(normalizedSpots));
+    // console.log("GJHGJHGKJHGKJHGJHG", normalizedSpots)
+    return normalizedSpots;
+
+  }
+
+};
+
 
 export const thunkGetSpotInfo = (spotId) => async (dispatch) => {
 
@@ -62,7 +88,6 @@ export const thunkGetSpotInfo = (spotId) => async (dispatch) => {
         dispatch (actionGetSpotInfo(normalizedSpotInfo));
         return normalizedSpotInfo;
     }
-
 }
 
 export const thunkCreateSpot = (spot, imgArray) => async (dispatch) => {
@@ -86,9 +111,6 @@ export const thunkCreateSpot = (spot, imgArray) => async (dispatch) => {
     };
 };
 
-
-
-
 //STATE SHAPE FOR SPOTS RELATED OBJECTS
 const initialState = {
     allSpots: {},
@@ -110,7 +132,11 @@ const spotsReducer = (state = initialState, action) => {
             newState.singleSpot.SpotImages = [ ...action.spotInfo.SpotImages ]
             return newState;
         }
-        //TODO: case for create
+        case GET_ALL_USER_SPOTS: {
+            const newState = { ...state };
+            newState.allSpots = action.spots;
+            return newState;
+        }
         default: return state
     }
 };

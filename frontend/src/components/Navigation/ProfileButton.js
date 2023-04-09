@@ -5,7 +5,7 @@ import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import './ProfileButton.css'
 
 
@@ -56,6 +56,7 @@ function ProfileButton({ user }) {
         {user ? (
 
           <div className="profile-container">
+
             <div className="username-container">
               <div>USERNAME:</div>
               <div>{user.username}</div>
@@ -71,9 +72,14 @@ function ProfileButton({ user }) {
               <div>{user.email}</div>
             </div>
 
+            <Link to='/spots/current' className="manage-spots-link" onClick={closeMenu}>
+              <div className="profile-buttons">
+                MANAGE SPOTS
+              </div>
+            </Link>
 
             <p>
-              <button className="logout-button" onClick={logout}>LOGOUT</button>
+              <button className="profile-buttons" onClick={logout}>LOGOUT</button>
             </p>
           </div>
 
