@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/waheed816/API-project/issues"
   },
-  "homepage": "https://github.com/waheed816/API-project#readme"
+  "homepage": "https://github.com/waheed816/API-project#readme",
+  "dependencies": {
+    "react-scroll-restoration": "^1.0.10"
+  }
 }
