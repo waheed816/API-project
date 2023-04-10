@@ -8,6 +8,9 @@ import AllSpots from "./components/AllSpots";
 import SpotInfo from "./components/SpotInfo";
 import CreateSpotForm from "./components/CreateSpotForm"
 import ManageSpots from "./components/ManageSpots";
+import UpdateSpotForm from "./components/UpdateSpotForm";
+import ScrollToTop from "./ScrollToTop";
+
 
 function App() {
   const dispatch = useDispatch();
@@ -26,6 +29,10 @@ function App() {
           </Route>
           <Route exact path='/spot/createSpotForm'>
             <CreateSpotForm />
+          </Route>
+          <Route exact path='/spot/:spotId/updateSpotForm'>
+            <ScrollToTop />
+            <UpdateSpotForm />
           </Route>
           <Route exact path='/spots/current'>
             <ManageSpots />

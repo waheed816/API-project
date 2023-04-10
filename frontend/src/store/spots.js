@@ -111,6 +111,15 @@ export const thunkCreateSpot = (spot, imgArray) => async (dispatch) => {
     };
 };
 
+export const thunkUpdateSpot = (updatedSpot, id) => async dispatch => {
+    await csrfFetch(`/api/spots/${id}`, {
+    method: 'PUT',
+    header: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updatedSpot)
+  });
+}
+
+
 //STATE SHAPE FOR SPOTS RELATED OBJECTS
 const initialState = {
     allSpots: {},

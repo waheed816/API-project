@@ -83,7 +83,7 @@ function ManageSpots() {
                                 </div>
                             </NavLink>
                             <div className="update-delete-spot">
-                                <NavLink to={`/spots/${spot.id}`}>
+                                <NavLink to={`/spot/${spot.id}/updateSpotForm`}>
                                     <button className='update-spot-button'>Update</button>
                                 </NavLink>
                                 <NavLink to={`/spots/${spot.id}`}>

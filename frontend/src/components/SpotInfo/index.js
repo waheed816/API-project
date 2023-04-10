@@ -65,7 +65,7 @@ function SpotInfo() {
         }
     }
 
-    console.log("SPOT INFO", spotInfo.SpotImages[0]);
+    console.log("SPOT INFO", spotInfo);
 
     return (
         <div className='single-spot-info-container'>
