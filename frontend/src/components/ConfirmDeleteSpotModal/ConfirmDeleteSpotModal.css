@@ -1,0 +1,45 @@
+.confirm-delete-spot-modal-container{
+    width: 300px;
+    padding: 13px;
+    color: navy;
+    font-family:  'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    border: solid navy;
+    border-radius: 13px;
+}
+
+.confirm-delete-title{
+    font-size: 21px;
+    font-weight: bold;
+
+}
+
+.delete-spot-modal{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 17px;
+}
+
+.confirm-delete-spot-buttons-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 13px;
+    padding-bottom: 11px;
+}
+
+.confirm-delete-spot-buttons-inner-container{
+    padding-top: 7px;
+}
+
+.confirm-delete-spot-button{
+    border: 1px solid white;
+    border-radius: 7px;
+    background-color: red;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 300px;
+    height: 43px;
+}
