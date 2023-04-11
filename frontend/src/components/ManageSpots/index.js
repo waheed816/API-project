@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkGetCurrentUserSpots } from "../../store/spots";
 import { NavLink } from "react-router-dom";
+import ConfirmDeleteSpotModal from "../ConfirmDeleteSpotModal";
+import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 import '../AllSpots/AllSpots.css';
 import './ManageSpots.css'
 
@@ -24,12 +26,12 @@ function ManageSpots() {
         dispatch(thunkGetCurrentUserSpots());
     }, [dispatch])
 
-    //USE THIS OR CODE BREAKS!!!
-    if(!Object.keys(spots).length){
-        return(
-            <i className="fa-solid fa-truck-ramp-box spot-info-loading">LOADING...</i>
-        )
-    }
+//USE THIS OR CODE BREAKS!!!
+if(!Object.keys(spots).length){
+    return(
+        <i className="fa-solid fa-truck-ramp-box spot-info-loading">LOADING...</i>
+    )
+}
 
   return (
     <div>
@@ -86,9 +88,13 @@ function ManageSpots() {
                                 <NavLink to={`/spot/${spot.id}/updateSpotForm`}>
                                     <button className='update-spot-button'>Update</button>
                                 </NavLink>
-                                <NavLink to={`/spots/${spot.id}`}>
-                                    <button className='delete-spot-button'>Delete</button>
-                                </NavLink>
+                                <button className='delete-spot-button'>
+                                    <OpenModalMenuItem
+                                        itemText="Delete"
+                                        modalComponent={<ConfirmDeleteSpotModal spotId={spot.id}/>}
+                                    />
+                                </button>
+
                             </div>
                         </div>
 

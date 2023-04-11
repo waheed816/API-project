@@ -72,6 +72,7 @@
     margin-right: 13px;
     border: solid 2px navy;
     border-radius: 7px;
+    list-style-type: none
 }
 
 .update-spot-button:active{

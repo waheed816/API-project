@@ -36,12 +36,11 @@ function UpdateSpotForm() {
           setName(spot.name);
           setPrice(Number(spot.price).toFixed(2));
         }
-    }, [spot, dispatch]);
+    }, [spot]);
 
     useEffect(() => {
         dispatch(thunkGetCurrentUserSpots());
-    }, [dispatch])
-
+    }, [dispatch]);
 
     const handleSubmit = async(e) => {
 
