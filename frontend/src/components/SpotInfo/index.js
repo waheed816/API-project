@@ -1,23 +1,38 @@
 import { thunkGetSpotInfo } from '../../store/spots';
+import { thunkGetAllSpotReviews } from '../../store/reviews';
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import './SpotInfo.css';
 
+const months = [
+    "January", "February", "March",
+    "April", "May", "June",
+    "July", "August", "September",
+    "October", "November", "December"
+];
+
 function SpotInfo() {
 
     const dispatch = useDispatch();
     const { spotId } = useParams();
+    const spotInfo = useSelector(state => state.spots.singleSpot);
+    const currentUser = useSelector(state => state.session.user);
+    const allSpotReviews = useSelector(state => state.reviews.spot);
+    const allSpotReviewsArray = Object.values(allSpotReviews).reverse();
+    const allReviewsUserIdsArray = allSpotReviewsArray.map(review => review.User.id)
+
+    // console.log('dsfsdfsdfdsfdsfdsfd', allReviewsUserIdsArray.length)
 
     useEffect(() => {
-        dispatch(thunkGetSpotInfo(spotId))
+        dispatch(thunkGetSpotInfo(spotId));
+        dispatch(thunkGetAllSpotReviews(spotId));
     }, [dispatch, spotId]);
 
-    const spotInfo = useSelector(state => state.spots.singleSpot);
 
 
     function reserveClick() {
-        alert('FEATURE COMING SOON...');
+        alert('Feature Coming Soon');
     };
 
 
@@ -65,7 +80,7 @@ function SpotInfo() {
         }
     }
 
-    console.log("SPOT INFO", spotInfo);
+    // console.log("SPOT INFO", spotInfo);
 
     return (
         <div className='single-spot-info-container'>
@@ -134,6 +149,7 @@ function SpotInfo() {
                                 <p><strong>${Number(spotInfo.price).toFixed(2)}</strong>/night</p>
                                 <p className='reserve-div-reviews'>
                                     <i className="fa-solid fa-star"></i>
+                                    {spotInfo.numReviews === 1 && ` ${spotInfo.avgStarRating} · ${spotInfo.numReviews} review`}
                                     {spotInfo.numReviews ? ` ${spotInfo.avgStarRating} · ${spotInfo.numReviews} reviews` : " New"}
                                 </p>
                         </div>
@@ -147,10 +163,34 @@ function SpotInfo() {
                     <p>
                         <i className="fa-solid fa-star"></i>
                         <strong>
+                            {spotInfo.numReviews === 1 && ` ${spotInfo.avgStarRating} · ${spotInfo.numReviews} review`}
                             {spotInfo.numReviews ? ` ${spotInfo.avgStarRating} · ${spotInfo.numReviews} reviews` : " New"}
                         </strong>
                     </p>
                 </div>
+                {currentUser && spotInfo.Owner.id !== currentUser.id && !allReviewsUserIdsArray.includes(currentUser.id) && (
+                    <div className='post-review-button'>
+                        Post Your Review
+                    </div>
+                    )
+                }
+                    <div  className="review-info-section">
+                        {allSpotReviewsArray.length !== 0 && allSpotReviewsArray.map(review =>
+                            <div key={review.id} className='review-info-container'>
+                                <p className='review-username'>{review.User.firstName}</p>
+                                <p className='review-date'>{months[Number(review.createdAt.split('-')[1]-1)]} {review.createdAt.split('-')[0]}</p>
+                                <p>{review.review}</p>
+
+                                {review.User.id === currentUser?.id  &&
+                                    <div>DELETE REVIEW</div>
+                                }
+                            </div>
+                        )}
+                    </div>
+                {allSpotReviewsArray.length === 0 && currentUser && spotInfo.Owner.id !== currentUser.id && (
+                    <div className='first-review-message'>Be the first to post a review!</div>
+                )}
+
             </div>
         </div>
 

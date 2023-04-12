@@ -32,7 +32,7 @@ function ConfirmDeleteSpotModal({spotId}) {
                     <button className='confirm-delete-spot-button' onClick={deleteSpot}>Yes (Delete Spot)</button>
                 </div>
                 <div className="confirm-delete-spot-buttons-inner-container">
-                    <button className='confirm-delete-spot-button' onClick={closeModal}>No (Keep Spot)</button>
+                    <button className='keep-spot-button' onClick={closeModal}>No (Keep Spot)</button>
                 </div>
             </div>
 

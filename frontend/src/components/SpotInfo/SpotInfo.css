@@ -28,11 +28,11 @@
 .single-spot-image-container{
     display: flex;
     height: 333px;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
 .big-image-container{
-    width: 455px;
+    width: 511px;
     height: 333px;
     /* border: solid navy;
     border-radius: 13px; */
@@ -41,12 +41,11 @@
     align-content: center;
     border-radius: 13px;
     box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
-
 }
 
 .big-image{
     height: 333px;
-    width: 455px;
+    width: 511px;
     border-radius: 13px;
     border-radius: 13px;
     box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
@@ -59,7 +58,7 @@
     height: 333px;
     grid-gap: 13px;
     justify-content: space-evenly;
-    padding-left: 13px;
+    /* padding-left: 13px; */
 
 }
 
@@ -139,10 +138,40 @@
 
 }
 
+
+.review-info-section{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 313px);
+    /* width: 473px;
+    height: 333px; */
+    grid-gap: 13px;
+    justify-content: left;
+}
+
+.post-review-button{
+    padding-top: 13px;
+    padding-bottom: 13px;
+}
+
+.first-review-message{
+    padding-top: 23px;
+    padding-bottom: 53px;
+}
+
 .reserve-button:active {
     transform: scale(0.98);
     box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
 }
+
+.review-username{
+    font-size: larger;
+    font-weight: bold;
+}
+
+.review-date{
+    color: darkgrey
+}
+
 
 
 
