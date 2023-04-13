@@ -1,5 +1,8 @@
 #modal-content {
     border-radius: 15px;
+    border: solid navy 5px;
+    box-shadow: 0px 0px 21px 1px white;
+    justify-content: center;
 }
 
 .login-form-container {
@@ -61,17 +64,18 @@
 
 .input-box{
     margin-top: 7px;
-    width: 181px;
+    /* width: 181px; */
     border: solid 3px navy;
     border-radius: 5px;
     justify-content: center;
-    height: 33px;
+    /* height: 33px; */
     font-size: large;
+    padding: 11px;
 }
 
 .login-submit-button{
     font-family: 'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
-    font-size: 14px;
+    font-size: 23px;
     font-weight: bold;
     color: white;
     background-color: red;
@@ -80,28 +84,34 @@
     padding: 3px;
     border-radius: 10px;
     margin-top: 15px;
-    width: 181px;
-    height: 53px;
-    font-size: 27px;
+    width: 191px;
+    height: 43px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
 }
 
 .demo-button-container{
+    display: flex;
     margin-top: 23px;
+    width: 191px;
+    align-items: center;
+    justify-content: center;
 }
 
 .demo-user-login{
     font-family: 'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
-    font-size: 14px;
+    font-size: 17px;
     font-weight: bold;
     color: white;
     background-color: navy;
     cursor: pointer;
     padding: 11px;
     border-radius: 10px;
-    margin: 15px;
-    height: 53px;
-    font-size: 13px;
     text-decoration: none;
+    align-items: center;
+    width: 173px;
+    text-align: center;
 }
 
 .login-disabled{
@@ -116,7 +126,7 @@
     border-radius: 10px;
     margin-top: 15px;
     width: 181px;
-    height: 53px;
+    height: 43px;
 }
 
 .login-button-container{

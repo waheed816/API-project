@@ -52,11 +52,12 @@
     border-radius: 5px;
     justify-content: center;
     height: 23px;
+    padding: 5px;
 }
 
 .signup-submit-button{
     font-family: 'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
-    font-size: 14px;
+    font-size: 17px;
     font-weight: bold;
     color: white;
     background-color:red;
@@ -65,20 +66,19 @@
     padding: 3px;
     border-radius: 10px;
     /* margin-top: 15px; */
-    width: 233px;
-    height: 33px;
-    font-size: 17px;
+    width: 243px;
+    height: 53px;
 }
 
 .signup-disabled{
     font-family: 'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
-    font-size: 14px;
+    font-size: 17px;
     font-weight: bold;
     color: lightgray;
     background-color:white;
     border: 3px solid lightgray;
     cursor: not-allowed;
-    padding: 3px;
+    /* padding: 3px; */
     border-radius: 10px;
     /* margin-top: 15px; */
     width: 233px;

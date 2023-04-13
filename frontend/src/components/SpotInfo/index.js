@@ -3,7 +3,9 @@ import { thunkGetAllSpotReviews } from '../../store/reviews';
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
+import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 import './SpotInfo.css';
+import ConfirmDeleteReviewModal from '../ConfirmDeleteReviewModal';
 
 const months = [
     "January", "February", "March",
@@ -19,7 +21,7 @@ function SpotInfo() {
     const spotInfo = useSelector(state => state.spots.singleSpot);
     const currentUser = useSelector(state => state.session.user);
     const allSpotReviews = useSelector(state => state.reviews.spot);
-    const allSpotReviewsArray = Object.values(allSpotReviews).reverse();
+    const allSpotReviewsArray = Object.values(allSpotReviews);
     const allReviewsUserIdsArray = allSpotReviewsArray.map(review => review.User.id)
 
     // console.log('dsfsdfsdfdsfdsfdsfd', allReviewsUserIdsArray.length)
@@ -149,8 +151,9 @@ function SpotInfo() {
                                 <p><strong>${Number(spotInfo.price).toFixed(2)}</strong>/night</p>
                                 <p className='reserve-div-reviews'>
                                     <i className="fa-solid fa-star"></i>
-                                    {spotInfo.numReviews === 1 && ` ${spotInfo.avgStarRating} · ${spotInfo.numReviews} review`}
-                                    {spotInfo.numReviews ? ` ${spotInfo.avgStarRating} · ${spotInfo.numReviews} reviews` : " New"}
+                                    {spotInfo.numReviews === 1 && ` ${Number(spotInfo.avgStarRating).toFixed(1)} · ${spotInfo.numReviews} review`}
+                                    {spotInfo.numReviews > 1 && ` ${Number(spotInfo.avgStarRating).toFixed(1)} · ${spotInfo.numReviews} reviews`}
+                                    {spotInfo.numReviews === 0 ? ' New' : null}
                                 </p>
                         </div>
                     <div className='reserve-container' onClick={reserveClick}>
@@ -163,8 +166,9 @@ function SpotInfo() {
                     <p>
                         <i className="fa-solid fa-star"></i>
                         <strong>
-                            {spotInfo.numReviews === 1 && ` ${spotInfo.avgStarRating} · ${spotInfo.numReviews} review`}
-                            {spotInfo.numReviews ? ` ${spotInfo.avgStarRating} · ${spotInfo.numReviews} reviews` : " New"}
+                            {spotInfo.numReviews === 1 && ` ${Number(spotInfo.avgStarRating).toFixed(1)} · ${spotInfo.numReviews} review`}
+                            {spotInfo.numReviews > 1 && ` ${Number(spotInfo.avgStarRating).toFixed(1)} · ${spotInfo.numReviews} reviews`}
+                            {spotInfo.numReviews === 0 ? ' New' : null}
                         </strong>
                     </p>
                 </div>
@@ -179,10 +183,15 @@ function SpotInfo() {
                             <div key={review.id} className='review-info-container'>
                                 <p className='review-username'>{review.User.firstName}</p>
                                 <p className='review-date'>{months[Number(review.createdAt.split('-')[1]-1)]} {review.createdAt.split('-')[0]}</p>
-                                <p>{review.review}</p>
+                                <p className='review-content'>{review.review}</p>
 
                                 {review.User.id === currentUser?.id  &&
-                                    <div>DELETE REVIEW</div>
+                                    <div className='delete-review-button'>
+                                        <OpenModalMenuItem
+                                            itemText='Delete'
+                                            modalComponent={<ConfirmDeleteReviewModal reviewId={review.id} spotId={spotId} />} />
+
+                                    </div>
                                 }
                             </div>
                         )}
