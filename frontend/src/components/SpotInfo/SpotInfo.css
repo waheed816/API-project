@@ -140,12 +140,22 @@
 
 
 .review-info-section{
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 313px);
-    /* width: 473px;
-    height: 333px; */
-    grid-gap: 13px;
+    /* display: grid;
+    grid-template-columns: repeat(auto-fill, 373px); */
+    /* width: */
+    display: flex;
+    flex-direction: row;
+    max-width: 1000px;
+    overflow-wrap: break-word;
+    /* height: 333px; */
+    gap: 21px;
     justify-content: left;
+    padding-bottom: 23px;
+}
+
+.review-info-container{
+    /* display: grid; */
+    width: 313px;
 }
 
 .post-review-button{
@@ -154,7 +164,7 @@
 }
 
 .first-review-message{
-    padding-top: 23px;
+    /* padding-top: 23px; */
     padding-bottom: 53px;
 }
 
@@ -166,12 +176,26 @@
 .review-username{
     font-size: larger;
     font-weight: bold;
+
 }
 
 .review-date{
-    color: darkgrey
+    color: darkgrey;
 }
 
+
+.delete-review-button{
+    list-style-type: none;
+    font-weight: bold;
+    background-color: navy;
+    color: white;
+    border: solid 2px navy;
+    border-radius: 7px;
+    list-style-type: none;
+    width: 77px;
+    text-align: center;
+    cursor: pointer;
+}
 
 
 

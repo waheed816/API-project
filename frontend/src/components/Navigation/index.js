@@ -16,7 +16,7 @@ function Navigation({ isLoaded }){
         <div className='nav-bar-left'>
           <NavLink exact to="/">
             <i className="logo-left fa-solid fa-brands fa-airbnb"></i>
-            <i className="fa-solid logo-text"><h2>CLONE-CNC</h2></i>
+            <i className="fa-solid logo-text"><h1>VACAN-C?C</h1></i>
             <i className="logo-right fa-solid fa-brands fa-airbnb"></i>
           </NavLink>
         </div>

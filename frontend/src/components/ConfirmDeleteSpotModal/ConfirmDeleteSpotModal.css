@@ -1,10 +1,10 @@
 .confirm-delete-spot-modal-container{
-    width: 300px;
+    width: 333px;
     padding: 13px;
     color: navy;
     font-family:  'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
     border: solid navy;
-    border-radius: 13px;
+    border-radius: 9px;
 }
 
 .confirm-delete-title{
@@ -40,7 +40,7 @@
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
-    width: 300px;
+    width: 333px;
     height: 43px;
 }
 
@@ -52,6 +52,6 @@
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
-    width: 300px;
+    width: 333px;
     height: 43px;
 }

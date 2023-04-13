@@ -1,17 +1,17 @@
 import { useDispatch } from "react-redux";
-import { thunkDeleteSpot } from "../../store/spots";
+import { thunkDeleteUserReview } from "../../store/reviews";
 import { useModal } from "../../context/Modal";
 
-import './ConfirmDeleteSpotModal.css'
+import '../ConfirmDeleteSpotModal/ConfirmDeleteSpotModal.css'
 
-function ConfirmDeleteSpotModal({spotId}) {
+function ConfirmDeleteReviewModal({reviewId, spotId}) {
 
     const { closeModal } = useModal();
     const dispatch = useDispatch();
 
-    const deleteSpot = (e) => {
+    const deleteReview = (e) => {
         e.preventDefault();
-        dispatch(thunkDeleteSpot(spotId));
+        dispatch(thunkDeleteUserReview(reviewId, spotId));
         closeModal();
     }
 
@@ -25,14 +25,14 @@ function ConfirmDeleteSpotModal({spotId}) {
                 </div>
             </div>
             <div>
-                Are you sure you want to remove this spot from the listings?
+                Are you sure you want to delete this review?
             </div>
             <div className="confirm-delete-spot-buttons-container">
                 <div className="confirm-delete-spot-buttons-inner-container">
-                    <button className='confirm-delete-spot-button' onClick={deleteSpot}>Yes (Delete Spot)</button>
+                    <button className='confirm-delete-spot-button' onClick={deleteReview}>Yes (Delete Review)</button>
                 </div>
                 <div className="confirm-delete-spot-buttons-inner-container">
-                    <button className='keep-spot-button' onClick={closeModal}>No (Keep Spot)</button>
+                    <button className='keep-spot-button' onClick={closeModal}>No (Keep Review)</button>
                 </div>
             </div>
 
@@ -40,4 +40,4 @@ function ConfirmDeleteSpotModal({spotId}) {
     )
 }
 
-export default ConfirmDeleteSpotModal;
+export default ConfirmDeleteReviewModal;

@@ -46,22 +46,24 @@ function AllSpots() {
                         alt={`${spot.name}'s photo unavailable`}>
                     </img>
                 </div>
-                <p className="spot-info">
+                {/* <p className="spot-info">
                     <strong>{spot.name}</strong>
-                </p>
+                </p> */}
+                <div className="city-state-star-container">
+                    <p className="spot-info">
+                        {spot.city}, {spot.state}
+                    </p>
+                    <p className="spot-info">
+                        <i className="fa-solid fa-star fa-xl"></i>
+                        {spot.avgRating === "There are no current ratings for this spot" ? <strong className="all-spots-price">New</strong> :
+                        <strong className="all-spots-rating">
+                        {`${Number(spot.avgRating).toFixed(1)}`}
+                        </strong>
+                        }
+                    </p>
+                </div>
                 <p className="spot-info">
-                    {spot.city}, {spot.state}
-                </p>
-                <p className="spot-info">
-                    <i className="fa-solid fa-star"></i>
-                    {spot.avgRating === "There are no current ratings for this spot" ? ' New' :
-                    <>
-                        {` ${Number(spot.avgRating).toFixed(1)} stars`}
-                    </>
-                    }
-                </p>
-                <p className="spot-info">
-                    <strong>${Number(spot.price).toFixed(2)}</strong>/night
+                    <strong className="all-spots-price">${Number(spot.price).toFixed(2)}</strong>/night
                 </p>
             </div>
         </NavLink>)}

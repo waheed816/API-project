@@ -28,6 +28,7 @@ function App() {
             <AllSpots />
           </Route>
           <Route exact path='/spot/createSpotForm'>
+            <ScrollToTop />
             <CreateSpotForm />
           </Route>
           <Route exact path='/spot/:spotId/updateSpotForm'>
@@ -35,9 +36,11 @@ function App() {
             <UpdateSpotForm />
           </Route>
           <Route exact path='/spots/current'>
+            <ScrollToTop />
             <ManageSpots />
           </Route>
           <Route exact path='/spots/:spotId'>
+            <ScrollToTop />
             <SpotInfo />
           </Route>
         </Switch>

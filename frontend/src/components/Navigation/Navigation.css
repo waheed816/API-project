@@ -2,13 +2,12 @@
     display: none
 }
 .logo-text{
-    transform: rotate(180deg);
+    /* transform: rotate(180deg); */
     color: white;
-    padding: 3px;
     border: 3px solid white;
     border-radius: 21px;
-    font-size: 17px;
-
+    font-size: 13px;
+    box-shadow: 0px 0px 21px 1px white;
  }
 
 
@@ -37,9 +36,9 @@
     margin-right: 0px;
     margin-top: 0px;
     margin-bottom: 0px;
-    padding: 3px 5px;
+    /* padding: 3px 5px; */
     z-index:1;
-    border-radius: 17px;
+    border-radius: 0px 0px 11px 11px;
  }
 
 
@@ -69,16 +68,18 @@
  .create-new-spot{
    font-family:  'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
    text-decoration: none;
-   background-color: white;
-   width: fit-content;
+   background-color: navy;
+   /* width: fit-content; */
    padding: 13px;
+   border: white solid;
    border-radius: 13px;
-   color: navy;
+   color: white;
    font-weight: bold;
    display: flex;
    /* flex-direction: row; */
    box-sizing: border-box;
-   margin: 10px;
+   margin: 13px;
+   box-shadow: 0px 0px 21px 1px white;
  }
 
  .profile-button{

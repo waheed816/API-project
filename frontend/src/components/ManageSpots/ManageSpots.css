@@ -14,7 +14,7 @@
 }
 
 .manage-spots-heading{
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    /* font-family:Verdana, Geneva, Tahoma, sans-serif;
     justify-content: left;
     display: grid;
     grid-template-columns: repeat(auto-fill, 233px);
@@ -23,7 +23,19 @@
     justify-content: center;
     max-width: 1221px;
     margin: auto;
+    color: navy; */
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 25px;
+    justify-content: left;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 313px);
     color: navy;
+    gap: 31px;
+    padding-top: 23px;
+    justify-content: center;
+    max-width: 1473px;
+    margin: auto;
+
 }
 
 .manage-create-spot{
@@ -50,8 +62,11 @@
 }
 
 .update-delete-spot{
-    padding: 13px;
-    margin-bottom: 19px;
+    display: flex;
+    padding-top: 17px;
+    padding-left: 5px;
+    margin-bottom: 27px;
+    gap: 23px;
 }
 
 .update-spot-button{
@@ -59,9 +74,12 @@
     font-weight: bold;
     background-color: white;
     color: navy;
-    margin-right: 13px;
+    /* margin-right: 13px; */
     border: solid 2px navy;
     border-radius: 7px;
+    cursor: pointer;
+    width: 85px;
+    height: 33px;
 }
 
 .delete-spot-button{
@@ -69,10 +87,13 @@
     font-weight: bold;
     background-color: white;
     color: navy;
-    margin-right: 13px;
+    /* margin-right: 13px; */
     border: solid 2px navy;
     border-radius: 7px;
-    list-style-type: none
+    list-style-type: none;
+    cursor: pointer;
+    width: 85px;
+
 }
 
 .update-spot-button:active{
