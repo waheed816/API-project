@@ -21,8 +21,7 @@ export const actionDeleteReview = (reviewId) => {
 }
 
 
-
-//NORMALIZATION FUNCTIONS
+//NORMALIZATION FUNCTION
 const funcNormalizeSpotReviews = (reviews) => {
     let normalizedSpotReviews = {};
     if (reviews){
@@ -33,6 +32,7 @@ const funcNormalizeSpotReviews = (reviews) => {
 
 //THUNKS
 export const thunkGetAllSpotReviews = (spotId) => async (dispatch) => {
+
     const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
 
     if(res.ok) {
@@ -44,6 +44,7 @@ export const thunkGetAllSpotReviews = (spotId) => async (dispatch) => {
 };
 
 export const thunkDeleteUserReview = (reviewId, spotId) => async dispatch => {
+
     const res = await csrfFetch(`/api/reviews/${reviewId}`,
       { method: 'DELETE' })
 
@@ -54,13 +55,28 @@ export const thunkDeleteUserReview = (reviewId, spotId) => async dispatch => {
     }
 };
 
+export const thunkCreateSpotReview = (newReview, spotId) => async dispatch => {
 
+    const res = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newReview)
+    });
+
+    if (res.ok) {
+      await dispatch(thunkGetAllSpotReviews(spotId));
+      await dispatch(thunkGetSpotInfo(spotId));
+      return;
+    };
+};
+
+//STATE SHAPE FOR REVIEWSS RELATED OBJECTS
 const initialState = {
     spot : {},
     user: {}
 }
 
-
+//REVIEWS REDUCER
 const reviewsReducer = (state = initialState, action) => {
     switch(action.type){
 

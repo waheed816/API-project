@@ -1,0 +1,100 @@
+.create-review-modal-container{
+    display: grid;
+    padding: 21px;
+    /* padding-left: 7px;
+    padding-right: 7px; */
+    justify-items: center;
+    font-family:  'Circular', 'BlinkMacSystemFont', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-weight: bolder;
+    color: navy;
+}
+
+.post-review-text{
+    font-size: x-large;
+    margin-bottom: 11px;
+}
+
+.create-review-form{
+    display: grid;
+    justify-items: center;
+}
+
+.review-text-area{
+    margin-top: 17px;
+    resize: none;
+    border-radius: 5px;
+    width: 250px;
+    height: 113px;
+    border: solid 1px navy;
+    padding: 7px;
+}
+
+.review-text-directions{
+    font-size: x-small;
+    font-style: oblique;
+    margin-top: 3px;
+    margin-left: 3px;;
+    color: darkgray;
+    justify-self: left;
+}
+
+.rating-input{
+    margin-top: 17px;
+    display: flex;
+}
+
+.rating-input .filled {
+    color: gold;
+}
+
+.rating-input .empty {
+color: darkgray;
+}
+
+.fa-2xl{
+    cursor: pointer;
+}
+
+.create-review-star{
+    color: grey;
+}
+
+.rating-input-container{
+    display: flex;
+    margin-top: 13px;
+}
+
+
+.review-submit-button{
+    margin-top: 33px;
+    margin-bottom: 7px;
+    width: 250px;
+    height: 43px;
+    background-color: red;
+    border: solid white 2px;
+    color: white;
+    border-radius: 9px;
+    font-weight: bolder;
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.33);
+    cursor: pointer;
+}
+
+.review-submit-disabled{
+    margin-top: 33px;
+    margin-bottom: 7px;
+    width: 250px;
+    height: 43px;
+    background-color: darkgray;
+    border: solid white 2px;
+    color: white;
+    border-radius: 9px;
+    font-weight: bolder;
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.33);
+    cursor: not-allowed;
+}
+
+.review-stars-text{
+    padding-left: 5px;
+    font-size: smaller;
+    margin-top: 17px;
+}

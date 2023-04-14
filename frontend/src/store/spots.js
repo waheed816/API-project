@@ -145,7 +145,7 @@ const initialState = {
     singleSpot: {}
 };
 
-
+//SPOTS REDUCER
 const spotsReducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_ALL_SPOTS: {
