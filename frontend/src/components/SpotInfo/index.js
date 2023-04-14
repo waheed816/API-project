@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 import './SpotInfo.css';
+import CreateReviewModal from '../CreateReviewModal';
 import ConfirmDeleteReviewModal from '../ConfirmDeleteReviewModal';
 
 const months = [
@@ -150,7 +151,7 @@ function SpotInfo() {
                             <div className='price-rating-info'>
                                 <p><strong>${Number(spotInfo.price).toFixed(2)}</strong>/night</p>
                                 <p className='reserve-div-reviews'>
-                                    <i className="fa-solid fa-star"></i>
+                                    <i className="fa-solid fa-star  fa-xl"></i>
                                     {spotInfo.numReviews === 1 && ` ${Number(spotInfo.avgStarRating).toFixed(1)} · ${spotInfo.numReviews} review`}
                                     {spotInfo.numReviews > 1 && ` ${Number(spotInfo.avgStarRating).toFixed(1)} · ${spotInfo.numReviews} reviews`}
                                     {spotInfo.numReviews === 0 ? ' New' : null}
@@ -164,7 +165,7 @@ function SpotInfo() {
                 </div>
                 <div className='reviews-info'>
                     <p>
-                        <i className="fa-solid fa-star"></i>
+                        <i className="fa-solid fa-star fa-xl"></i>
                         <strong>
                             {spotInfo.numReviews === 1 && ` ${Number(spotInfo.avgStarRating).toFixed(1)} · ${spotInfo.numReviews} review`}
                             {spotInfo.numReviews > 1 && ` ${Number(spotInfo.avgStarRating).toFixed(1)} · ${spotInfo.numReviews} reviews`}
@@ -174,7 +175,12 @@ function SpotInfo() {
                 </div>
                 {currentUser && spotInfo.Owner.id !== currentUser.id && !allReviewsUserIdsArray.includes(currentUser.id) && (
                     <div className='post-review-button'>
-                        Post Your Review
+                        <OpenModalMenuItem
+                            itemText="Post Your Review"
+                            modalComponent={<CreateReviewModal spotId={spotId}/>}
+
+
+                        />
                     </div>
                     )
                 }
@@ -189,7 +195,8 @@ function SpotInfo() {
                                     <div className='delete-review-button'>
                                         <OpenModalMenuItem
                                             itemText='Delete'
-                                            modalComponent={<ConfirmDeleteReviewModal reviewId={review.id} spotId={spotId} />} />
+                                            modalComponent={<ConfirmDeleteReviewModal reviewId={review.id} spotId={spotId} />}
+                                        />
 
                                     </div>
                                 }

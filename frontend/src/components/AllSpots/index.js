@@ -34,7 +34,7 @@ function AllSpots() {
     <div className="all-spots-container">
       {spots.map(spot =>
         <NavLink to={`/spots/${spot.id}`} key={spot.id} className="spot-container">
-            <div className="spot-info-container">
+            <div title={spot.name} className="spot-info-container">
                 <div className='spot-image-container'>
                     <img
                         className="all-spots-image"
