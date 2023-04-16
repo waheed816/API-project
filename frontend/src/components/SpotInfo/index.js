@@ -178,8 +178,6 @@ function SpotInfo() {
                         <OpenModalMenuItem
                             itemText="Post Your Review"
                             modalComponent={<CreateReviewModal spotId={spotId}/>}
-
-
                         />
                     </div>
                     )

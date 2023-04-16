@@ -190,16 +190,23 @@
     background-color: navy;
     color: white;
     border: solid 2px white;
-    border-radius: 13px;
-    list-style-type: none;
-    width: 177px;
-    text-align: center;
+    border-radius: 9px;
+    /* list-style-type: none; */
+    width: 143px;
     cursor: pointer;
     margin-top: 27px;
     margin-bottom: 27px;
     box-shadow: 0px 0px 9px 3px rgba(0, 0, 0, 0.34);
+    height: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: none;
 }
 
+/* .modal-item-text{
+    cursor: pointer;
+} */
 
 .delete-review-button{
     list-style-type: none;

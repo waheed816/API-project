@@ -66,7 +66,8 @@
     padding-top: 17px;
     padding-left: 5px;
     margin-bottom: 27px;
-    gap: 23px;
+    gap: 13px;
+
 }
 
 .update-spot-button{
@@ -78,8 +79,13 @@
     border: solid 2px navy;
     border-radius: 7px;
     cursor: pointer;
-    width: 85px;
-    height: 33px;
+    /* width: 65px;
+    height: 23px; */
+    /* align-self: center;
+    justify-self:center;
+    display: flex; */
+    /* text-decoration: none; */
+
 }
 
 .delete-spot-button{
@@ -92,7 +98,7 @@
     border-radius: 7px;
     list-style-type: none;
     cursor: pointer;
-    width: 85px;
+    /* width: 65px; */
 
 }
 
