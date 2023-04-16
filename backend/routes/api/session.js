@@ -29,7 +29,7 @@ router.post('/',  validateLogin, async (req, res, next) => {
         err.message = "Invalid credentials"
         err.errors =
           {
-            loginError: "UNAUTHORIZED LOGIN",
+            loginError: "The provided credentials were invalid",
             username: "Please check your username or email",
             password: "Please check your password"
           }
