@@ -94,7 +94,7 @@ function LoginFormModal() {
               LOGIN
             </button>
           <div className="demo-button-container">
-            <Link to='/' onClick={demoUserLogin} className='demo-user-login'>DEMO USER LOGIN</Link>
+            <Link to='/' onClick={demoUserLogin} className='demo-user-login'>Log in as Demo User</Link>
           </div>
           </div>
         </form>
