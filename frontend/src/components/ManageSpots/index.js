@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { thunkGetCurrentUserSpots } from "../../store/spots";
 import { NavLink } from "react-router-dom";
 import ConfirmDeleteSpotModal from "../ConfirmDeleteSpotModal";
-import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
+// import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
+import OpenModalMenuItem from '../OpenModalButton';
 import '../AllSpots/AllSpots.css';
 import './ManageSpots.css'
 
@@ -84,15 +85,15 @@ if(!Object.keys(spots).length){
                                         </div>
                                     </NavLink>
                                         <div className="update-delete-spot">
-                                            <NavLink to={`/spot/${spot.id}/updateSpotForm`}>
-                                                    <button className='update-spot-button'>Update</button>
+                                            <NavLink to={`/spot/${spot.id}/updateSpotForm`} style={{textDecoration: 'none'}}>
+                                                    <div className='update-spot-button'>Update</div>
                                             </NavLink>
-                                            <button className='delete-spot-button'>
+                                            <div>
                                                 <OpenModalMenuItem
                                                     itemText="Delete"
                                                     modalComponent={<ConfirmDeleteSpotModal spotId={spot.id}/>}
                                                 />
-                                            </button>
+                                            </div>
                                         </div>
                                 </div>
 
