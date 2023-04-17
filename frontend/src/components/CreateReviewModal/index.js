@@ -49,6 +49,7 @@ function CreateReviewModal({spotId}) {
                     className="review-text-area"
                     value={review}
                     placeholder='Leave your review here...'
+                    autofocus="autofocus"
                     onChange={(e) => setReview(e.target.value)}
                 >
                 </textarea>

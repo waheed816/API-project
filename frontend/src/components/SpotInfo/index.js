@@ -3,7 +3,8 @@ import { thunkGetAllSpotReviews } from '../../store/reviews';
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
+// import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
+import OpenModalMenuItem from '../OpenModalButton';
 import './SpotInfo.css';
 import CreateReviewModal from '../CreateReviewModal';
 import ConfirmDeleteReviewModal from '../ConfirmDeleteReviewModal';
@@ -174,12 +175,12 @@ function SpotInfo() {
                     </p>
                 </div>
                 {currentUser && spotInfo.Owner.id !== currentUser.id && !allReviewsUserIdsArray.includes(currentUser.id) && (
-                    <div className='post-review-button'>
+                    // <div className='post-review-button'>
                         <OpenModalMenuItem
                             itemText="Post Your Review"
                             modalComponent={<CreateReviewModal spotId={spotId}/>}
                         />
-                    </div>
+                    // </div>
                     )
                 }
                     <div  className="review-info-section">
@@ -190,13 +191,13 @@ function SpotInfo() {
                                 <p className='review-content'>{review.review}</p>
 
                                 {review.User.id === currentUser?.id  &&
-                                    <div className='delete-review-button'>
+                                    // <div className='delete-review-button'>
                                         <OpenModalMenuItem
                                             itemText='Delete'
                                             modalComponent={<ConfirmDeleteReviewModal reviewId={review.id} spotId={spotId} />}
                                         />
 
-                                    </div>
+                                    // </div>
                                 }
                             </div>
                         )}
